@@ -1,4 +1,4 @@
-package com.kaya.digitalmining
+package com.kaya.digitalmining.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
