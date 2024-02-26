@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "871771909785",
+    "project_id": "sdk-network",
+    "storage_bucket": "sdk-network.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871771909785:android:da6f54d8a4e0b11ab49208",
+        "android_client_info": {
+          "package_name": "com.kaya.digitalmining"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDEit04rSulBIPBw40UsqIQWwGj3H7EHw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
