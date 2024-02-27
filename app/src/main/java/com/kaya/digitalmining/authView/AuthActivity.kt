@@ -1,11 +1,8 @@
-package com.kaya.digitalmining.view
+package com.kaya.digitalmining.authView
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,17 +10,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.kaya.digitalmining.mainView.HomeScreen
 import com.kaya.digitalmining.ui.theme.DigitalMiningTheme
 
-class MainActivity : ComponentActivity() {
+class AuthActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            NavHost(navController, startDestination = "homeScreen") {
-                composable("homeScreen") { HomeScreen(navController = navController) }
-                composable("miningScreen") { MiningScreen(navController = navController)}
+            NavHost(navController = navController, startDestination = "signUpScreen" ){
+                composable("signUpScreen"){ SignUpScreen(navController = navController,this@AuthActivity)}
+                composable("loginScreen"){ LoginScreen(navController = navController)}
             }
         }
+    }
+}
+
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    DigitalMiningTheme {
+        Greeting("Android")
     }
 }

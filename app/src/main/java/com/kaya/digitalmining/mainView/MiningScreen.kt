@@ -1,4 +1,4 @@
-package com.kaya.digitalmining.view
+package com.kaya.digitalmining.mainView
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,18 +9,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.kaya.digitalmining.R
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun MiningScreen(navController : NavController){
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Home Screen")
+        Text(text = "Mining Screen")
 
         Button(
-            onClick = { navController.navigate("miningScreen") },
+            onClick = { navController.navigate("homeScreen"){
+                popUpTo("miningScreen"){
+                    inclusive = true
+                }
+            } },
             modifier = Modifier.padding(16.dp)
         ) {
-            Text("Go to Mining Screen")
+            Text("Go to Home Screen")
         }
     }
 }

@@ -1,12 +1,15 @@
 package com.kaya.digitalmining.controller
 
+import androidx.compose.runtime.Composable
 import com.kaya.digitalmining.contracts.AuthImplementation
 import com.kaya.digitalmining.model.User
 import com.kaya.digitalmining.service.FirebaseImplementor
+import com.kaya.digitalmining.util.CustomProgressDialog
 
 class Auth : AuthImplementation {
 
     private val initFirebase = FirebaseImplementor()
+
     override fun registerUser(user: User, callback: (Boolean) -> Unit) {
         with(initFirebase){
             firebaseAuth?.createUserWithEmailAndPassword(user.userEmail,user.userPassword)

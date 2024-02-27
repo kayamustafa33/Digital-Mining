@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/auth_nav"
-    app:startDestination="@id/homeScreen">
+    app:startDestination="@id/signUpScreen"
+    android:id="@+id/auth_nav">
 
     <composable
-        android:id="@+id/homeScreen"
-        android:name="com.kaya.digitalmining.view.HomeScreenKt"
-        android:label="Home Screen">
+        android:id="@+id/loginScreen"
+        android:name="com.kaya.digitalmining.authView.LoginScreen"
+        android:label="Mining Screen">
     </composable>
+
+    <composable
+        android:id="@+id/signUpScreen"
+        android:name="com.kaya.digitalmining.authView.SignUpScreen"
+        android:label="Mining Screen">
+    </composable>
+
 </navigation>

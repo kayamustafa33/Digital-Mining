@@ -13,9 +13,18 @@
         android:theme="@style/Theme.DigitalMining"
         tools:targetApi="31">
         <activity
-            android:name=".view.MainActivity"
+            android:name=".authView.AuthActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:theme="@style/Theme.DigitalMining">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".mainView.MainActivity"
+            android:exported="true"
             android:theme="@style/Theme.DigitalMining">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
