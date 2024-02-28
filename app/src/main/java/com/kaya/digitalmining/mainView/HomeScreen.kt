@@ -14,16 +14,5 @@ import androidx.navigation.NavController
 fun HomeScreen(navController: NavController) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "Home Screen")
-
-        Button(
-            onClick = { navController.navigate("miningScreen"){
-                popUpTo("homeScreen"){
-                    inclusive = true
-                }
-            } },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Go to Mining Screen")
-        }
     }
 }

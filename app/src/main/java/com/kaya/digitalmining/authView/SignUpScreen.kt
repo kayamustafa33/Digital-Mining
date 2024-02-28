@@ -48,7 +48,7 @@ import com.kaya.digitalmining.util.getString
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SignUpScreen(navController: NavController,activity: Activity){
+fun SignUpScreen(navController: NavController,context: Context){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -137,10 +137,9 @@ fun SignUpScreen(navController: NavController,activity: Activity){
                           auth.registerUser(user){
                               if(it){
                                   showDialog = false
-                                    Intent(activity,MainActivity::class.java).also { intent ->
-                                        activity.startActivity(intent)
-                                        activity.finish()
-                                    }
+                                  Intent(context,MainActivity::class.java).also { intent ->
+                                        context.startActivity(intent)
+                                  }
                               }else {
                                   showDialog = false
                               }
@@ -175,6 +174,6 @@ fun SignUpScreen(navController: NavController,activity: Activity){
 @Composable
 fun PreviewSignUpPage() {
     val navController = rememberNavController()
-    val context = LocalContext.current as AppCompatActivity
+    val context = LocalContext.current
     SignUpScreen(navController,context)
 }

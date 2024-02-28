@@ -79,6 +79,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation("androidx.compose.material:material:1.6.2")
+
     //Navigation Component
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
@@ -87,4 +89,6 @@ dependencies {
 
     //Data Binding
     kapt ("com.android.databinding:compiler:3.1.4")
+
+    implementation("androidx.compose.material3:material3:1.2.0")
 }

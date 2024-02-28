@@ -15,15 +15,5 @@ fun MiningScreen(navController : NavController){
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "Mining Screen")
 
-        Button(
-            onClick = { navController.navigate("homeScreen"){
-                popUpTo("miningScreen"){
-                    inclusive = true
-                }
-            } },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Go to Home Screen")
-        }
     }
 }
