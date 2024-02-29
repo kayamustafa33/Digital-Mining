@@ -64,7 +64,7 @@ fun LoginScreen(navController : NavController, context: Context) {
     ) {
 
         Text(
-            text = "Sign In",
+            text = getString(id = R.string.sign_in),
             color = Color.Black,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
@@ -123,7 +123,7 @@ fun LoginScreen(navController : NavController, context: Context) {
         }
 
         Text(
-            text = "Don't have an account yet? Sign up.",
+            text = getString(id = R.string.dont_have_account),
             modifier = Modifier.clickable {
                 navController.navigate("SignUpScreen")
             },
