@@ -3,4 +3,7 @@
     <string name="app_name">Digital Mining</string>
     <string name="sign_up">Kayıt Ol</string>
     <string name="tap_to_mine">Madencilik için dokunun</string>
+    <string name="sign_in">Giriş Yap</string>
+    <string name="email">E-mail</string>
+    <string name="password">Şifre</string>
 </resources>

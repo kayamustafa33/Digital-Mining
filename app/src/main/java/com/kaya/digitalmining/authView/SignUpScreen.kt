@@ -48,7 +48,7 @@ import com.kaya.digitalmining.util.getString
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SignUpScreen(navController: NavController,context: Context){
+fun SignUpScreen(navController: NavController, context: Context){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }

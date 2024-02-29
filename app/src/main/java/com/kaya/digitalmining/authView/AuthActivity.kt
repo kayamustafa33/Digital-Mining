@@ -18,9 +18,9 @@ class AuthActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "signUpScreen" ){
+            NavHost(navController = navController, startDestination = "loginScreen" ){
                 composable("signUpScreen"){ SignUpScreen(navController = navController,this@AuthActivity)}
-                composable("loginScreen"){ LoginScreen(navController = navController)}
+                composable("loginScreen"){ LoginScreen(navController = navController, this@AuthActivity)}
             }
         }
     }

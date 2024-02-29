@@ -3,4 +3,7 @@
     <string name="title_activity_auth" translatable="false">AuthActivity</string>
     <string name="sign_up">Sign Up</string>
     <string name="tap_to_mine">Tap to Mine</string>
+    <string name="sign_in">Sign In</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
 </resources>
