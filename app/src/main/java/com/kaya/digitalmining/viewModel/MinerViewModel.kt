@@ -7,14 +7,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.kaya.digitalmining.contracts.MinerImplementation
 import com.kaya.digitalmining.model.Miner
+import com.kaya.digitalmining.model.OldMiner
 import com.kaya.digitalmining.service.FirebaseImplementor
 
 class MinerViewModel : ViewModel(), MinerImplementation {
 
-    val minerData = MutableLiveData<Miner>()
+    val minerData = MutableLiveData<Miner?>()
+    val oldMinerData = MutableLiveData<List<OldMiner>>()
     private val firebaseImplementor = FirebaseImplementor()
 
-    override fun getMinerData(callback: (Miner?) -> Unit) {
+    override fun getMinerData() {
         with(firebaseImplementor){
             firebaseUser?.let {
                 createOrOpenFirebaseDB("Miner")
@@ -27,13 +29,12 @@ class MinerViewModel : ViewModel(), MinerImplementation {
                                 snapshot.child("initDate").value.toString(),
                                 snapshot.child("sdkCoinAmount").value.toString().toInt()
                             )
-                            callback(miner)
                             minerData.value = miner
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        callback(null)
+                        minerData.value = null
                     }
 
                 }
@@ -63,12 +64,47 @@ class MinerViewModel : ViewModel(), MinerImplementation {
         }
     }
 
-    override fun setOldMinerData(miner: Miner, callback: (Boolean) -> Unit) {
-
+    override fun setOldMinerData(miner: Miner) {
+        with(firebaseImplementor){
+            firebaseUser?.let {
+                createOrOpenFirebaseDB("OldMiner")
+                databaseReference?.child(miner.userID)?.child(miner.minerID)
+                    ?.setValue(miner)
+            }
+        }
     }
 
-    override fun getOldMinerData(callback: (List<Miner>?) -> Unit) {
+    override fun getOldMinerData() {
+        with(firebaseImplementor){
+            firebaseUser?.let {
+                createOrOpenFirebaseDB("OldMiner")
+                val minerListener = object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if(snapshot.exists()){
+                            val tempList = mutableListOf<OldMiner>()
+                            for(dataSnapshot in snapshot.children){
+                                val miner = OldMiner(
+                                    snapshot.child("minerID").value.toString(),
+                                    snapshot.child("userID").value.toString(),
+                                    snapshot.child("initDate").value.toString(),
+                                    snapshot.child("sdkCoinAmount").value.toString().toInt()
+                                )
+                                tempList.add(miner)
+                            }
+                            oldMinerData.value = tempList
+                            tempList.clear()
+                        }
+                    }
 
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                }
+                databaseReference?.child(firebaseUser!!.uid)!!.addListenerForSingleValueEvent(minerListener)
+            }
+
+        }
     }
 
 }

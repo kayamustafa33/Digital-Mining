@@ -1,6 +1,7 @@
 package com.kaya.digitalmining.mainView
 
 import android.content.Context
+import android.text.TextUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,26 +30,22 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kaya.digitalmining.R
 import com.kaya.digitalmining.controller.DateController
 import com.kaya.digitalmining.controller.HashController
 import com.kaya.digitalmining.model.Miner
 import com.kaya.digitalmining.service.FirebaseImplementor
 import com.kaya.digitalmining.util.SubsCardItem
+import com.kaya.digitalmining.util.getString
 import com.kaya.digitalmining.viewModel.MinerViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
-import kotlin.random.Random
 
 @Composable
 fun MiningScreen(context: Context){
@@ -68,16 +65,14 @@ fun MiningScreen(context: Context){
     val hashController = HashController()
 
     // Can not take any data without user login!
-    minerViewModel.getMinerData { miner ->
-        miner?.let {
-            dateController.countDownTimer(it.initDate, context)
-        }
-    }
+    minerViewModel.getMinerData()
 
-    minerViewModel.minerData.observe(LocalLifecycleOwner.current){
-        it?.let { data ->
+    minerViewModel.minerData.observe(LocalLifecycleOwner.current){data ->
+        if(data != null){
             sdkCoin = data.sdkCoinAmount
+            dateController.countDownTimer(data.initDate, context)
         }
+
     }
 
     dateController.remain.observe(LocalLifecycleOwner.current){
@@ -133,7 +128,8 @@ fun MiningScreen(context: Context){
                                 val formattedDate = dateFormat.format(currentDate)
                                 val miner = Miner(minerId,firebaseUser!!.uid,formattedDate.toString(),10)
                                 minerViewModel.setMinerData(miner){
-
+                                    //Show ads and register old miner data
+                                    minerViewModel.setOldMinerData(miner)
                                 }
                             }
                         }
@@ -147,7 +143,7 @@ fun MiningScreen(context: Context){
                     .size(199.dp)
                 ) {
                 Text(
-                    text = remain,
+                    text = if(TextUtils.isEmpty(remain).not()) remain else getString(id = R.string.tap_to_mine),
                     fontSize = 20.sp,
                     color = Color(0XFFF5B041)
                 )
