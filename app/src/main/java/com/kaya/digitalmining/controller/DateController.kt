@@ -1,7 +1,12 @@
 package com.kaya.digitalmining.controller
 
+import android.content.Context
 import android.os.CountDownTimer
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.MutableLiveData
+import com.kaya.digitalmining.R
+import com.kaya.digitalmining.util.getString
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -16,7 +21,7 @@ class DateController {
 
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
-    fun countDownTimer(initDate: String) {
+    fun countDownTimer(initDate: String,context: Context) {
         val targetDate = Calendar.getInstance().apply {
             time = formatter.parse(initDate)!!
             add(Calendar.HOUR_OF_DAY, 4)
@@ -39,13 +44,13 @@ class DateController {
                     }
 
                     override fun onFinish() {
-                        remain.value = "Countdown finished!"
+                        remain.value = context.getString(R.string.tap_to_mine)
                         hashVisibility.value = false
                     }
                 }
                 countDownTimer?.start()
             } else {
-                remain.value = "Countdown finished!"
+                remain.value = context.getString(R.string.tap_to_mine)
                 hashVisibility.value = false
             }
         }

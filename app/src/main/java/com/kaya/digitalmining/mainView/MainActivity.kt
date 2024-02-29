@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.util.BottomNavItem
@@ -99,7 +100,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     when (selectedItemIndex) {
                         0 -> HomeScreen(navController = navController)
-                        1 -> MiningScreen()
+                        1 -> MiningScreen(this@MainActivity)
                         2 -> ProfileScreen(navController = navController)
                     }
                 }

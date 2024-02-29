@@ -16,7 +16,7 @@ class FirebaseImplementor {
         firebaseUser = firebaseAuth?.currentUser
     }
 
-    fun createFirebaseDB(dataBaseName : String){
+    fun createOrOpenFirebaseDB(dataBaseName : String){
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase?.getReference(dataBaseName)
     }
