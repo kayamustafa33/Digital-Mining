@@ -12,4 +12,6 @@ interface MinerImplementation {
     fun setOldMinerData(miner : Miner)
 
     fun getOldMinerData()
+
+    fun getTotalSdkNetworkAmount()
 }

@@ -1,7 +1,11 @@
 package com.kaya.digitalmining.mainView
 
 import android.content.Context
+import android.opengl.Visibility
 import android.text.TextUtils
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +22,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -42,6 +47,7 @@ import com.kaya.digitalmining.service.FirebaseImplementor
 import com.kaya.digitalmining.util.SubsCardItem
 import com.kaya.digitalmining.util.getString
 import com.kaya.digitalmining.viewModel.MinerViewModel
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -55,7 +61,7 @@ fun MiningScreen(context: Context){
 
     val cardList = remember { List(6) { index ->  "Item $index" } }
 
-    var remain by remember { mutableStateOf("") }
+    var remain by remember { mutableStateOf(context.getString(R.string.synchronization___)) }
     var diffState by remember { mutableLongStateOf(0L) }
     var hashVisibility by remember { mutableStateOf(true) }
     var hash by remember{ mutableStateOf("") }
@@ -66,13 +72,16 @@ fun MiningScreen(context: Context){
 
     // Can not take any data without user login!
     minerViewModel.getMinerData()
+    minerViewModel.getTotalSdkNetworkAmount()
 
     minerViewModel.minerData.observe(LocalLifecycleOwner.current){data ->
         if(data != null){
-            sdkCoin = data.sdkCoinAmount
             dateController.countDownTimer(data.initDate, context)
         }
+    }
 
+    minerViewModel.totalSDKNetworkAmount.observe(LocalLifecycleOwner.current){ total ->
+        sdkCoin = total
     }
 
     dateController.remain.observe(LocalLifecycleOwner.current){

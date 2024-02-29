@@ -23,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
@@ -44,9 +43,9 @@ import com.kaya.digitalmining.model.User
 import com.kaya.digitalmining.util.CustomProgressDialog
 import com.kaya.digitalmining.util.getString
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
-fun SignUpScreen(navController: NavController, context: Context){
+fun SignUpScreen(context: Context){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -171,7 +170,6 @@ fun SignUpScreen(navController: NavController, context: Context){
 @Preview
 @Composable
 fun PreviewSignUpPage() {
-    val navController = rememberNavController()
     val context = LocalContext.current
-    SignUpScreen(navController,context)
+    SignUpScreen(context)
 }
