@@ -1,10 +1,8 @@
 package com.kaya.digitalmining.authView
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

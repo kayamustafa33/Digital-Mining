@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,9 +28,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -89,6 +93,7 @@ fun LoginScreen(navController : NavController, context: Context) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp),
+            visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password),
@@ -98,7 +103,7 @@ fun LoginScreen(navController : NavController, context: Context) {
 
         Button(
             onClick = {
-                if (emailState.isNotEmpty() || passwordState.isNotEmpty()) {
+                if (emailState.isNotEmpty() && passwordState.isNotEmpty()) {
                     val user = User(emailState, passwordState)
                     val authentication = Auth()
                     authentication.authUser(user) {
@@ -116,6 +121,14 @@ fun LoginScreen(navController : NavController, context: Context) {
         ) {
             Text(text = getString(id = R.string.sign_in))
         }
+
+        Text(
+            text = "Don't have an account yet? Sign up.",
+            modifier = Modifier.clickable {
+                navController.navigate("SignUpScreen")
+            },
+            style = TextStyle(textDecoration = TextDecoration.None)
+        )
 
 
 
