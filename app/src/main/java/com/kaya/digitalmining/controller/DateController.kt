@@ -1,54 +1,53 @@
 package com.kaya.digitalmining.controller
 
 import android.os.CountDownTimer
-import android.view.View
-import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class DateController {
 
     private var countDownTimer: CountDownTimer? = null
-    private val hashController = HashController()
+    val remain = MutableLiveData<String>()
+    val hashVisibility = MutableLiveData<Boolean>()
+    var diffState  = MutableLiveData<Long>()
 
-    fun countDownTimer(initDate: String, remainText: TextView, hashText: TextView) {
-        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val targetDate = Calendar.getInstance()
-        targetDate.time = formatter.parse(initDate)!!
-        targetDate.add(Calendar.HOUR_OF_DAY,4)
+    private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
-        val currentDate = Calendar.getInstance().time
-        val diff = targetDate.timeInMillis - currentDate.time
+    fun countDownTimer(initDate: String) {
+        val targetDate = Calendar.getInstance().apply {
+            time = formatter.parse(initDate)!!
+            add(Calendar.HOUR_OF_DAY, 4)
+        }
 
-        if (diff > 0) {
-            hashController.hashCoinText(hashText,diff)
+        CoroutineScope(Dispatchers.Main).launch {
+            val diff = targetDate.timeInMillis - System.currentTimeMillis()
+            diffState.value = diff
 
-            countDownTimer = object : CountDownTimer(diff, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    val seconds = millisUntilFinished / 1000
-                    val minutes = seconds / 60
-                    val hours = minutes / 60
-                    val remainingMinutes = minutes % 60
-                    val remainingSeconds = seconds % 60
-                    remainText.text = String.format("%02d:%02d:%02d", hours, remainingMinutes, remainingSeconds)
+            if (diff > 0) {
+                countDownTimer?.cancel()
+                countDownTimer = object : CountDownTimer(diff, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        val seconds = millisUntilFinished / 1000
+                        val minutes = seconds / 60
+                        val hours = minutes / 60
+                        val remainingMinutes = minutes % 60
+                        val remainingSeconds = seconds % 60
+                        remain.value = String.format("%02d:%02d:%02d", hours, remainingMinutes, remainingSeconds)
+                    }
+
+                    override fun onFinish() {
+                        remain.value = "Countdown finished!"
+                        hashVisibility.value = false
+                    }
                 }
-
-                override fun onFinish() {
-                    remainText.text = "Countdown finished!"
-                    stopCountdown()
-                    hashText.visibility = View.INVISIBLE
-                }
+                countDownTimer?.start()
+            } else {
+                remain.value = "Countdown finished!"
+                hashVisibility.value = false
             }
-            countDownTimer?.start()
-        } else {
-            remainText.text = "Countdown finished!"
-            stopCountdown()
-            hashText.visibility = View.INVISIBLE
         }
     }
-
-    fun stopCountdown() {
-        countDownTimer?.cancel()
-    }
-
 }
