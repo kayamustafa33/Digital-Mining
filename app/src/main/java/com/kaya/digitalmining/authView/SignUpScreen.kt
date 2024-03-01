@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,11 +31,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.R
@@ -45,7 +51,7 @@ import com.kaya.digitalmining.util.getString
 
 
 @Composable
-fun SignUpScreen(context: Context){
+fun SignUpScreen(navController : NavController, context: Context){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -61,8 +67,17 @@ fun SignUpScreen(context: Context){
             .background(Color.White)
             .padding(horizontal = 20.dp)
             .wrapContentHeight(Alignment.CenterVertically),
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Text(
+            text = getString(id = R.string.sign_up),
+            color = Color.Black,
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
         OutlinedTextField(
             value = email,
             onValueChange = {email = it},
@@ -145,12 +160,26 @@ fun SignUpScreen(context: Context){
                           showDialog = false
                       }
             },
+            colors = ButtonColors(Color(0xFF3498DB),Color.White, Color(0xFF3498DB), Color(0xFF3498DB)),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
             ) {
             Text(text = getString(id = R.string.sign_up))
         }
+        Text(
+            text = getString(id = R.string.already_have_an_account),
+            modifier = Modifier
+                .clickable {
+                    navController.navigate("loginScreen") {
+                        popUpTo("signUpScreen") {
+                            inclusive = true
+                        }
+                    }
+            },
+
+            style = TextStyle(textDecoration = TextDecoration.None)
+        )
 
     }
 
@@ -171,5 +200,6 @@ fun SignUpScreen(context: Context){
 @Composable
 fun PreviewSignUpPage() {
     val context = LocalContext.current
-    SignUpScreen(context)
+    val navController = rememberNavController()
+    SignUpScreen(navController,context)
 }

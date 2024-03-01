@@ -19,7 +19,7 @@ class AuthActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "loginScreen" ){
-                composable("signUpScreen"){ SignUpScreen(this@AuthActivity)}
+                composable("signUpScreen"){ SignUpScreen(navController,this@AuthActivity)}
                 composable("loginScreen"){ LoginScreen(navController = navController, this@AuthActivity)}
             }
         }

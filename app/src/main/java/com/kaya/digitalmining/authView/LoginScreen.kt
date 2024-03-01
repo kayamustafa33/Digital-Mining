@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -102,6 +103,7 @@ fun LoginScreen(navController : NavController, context: Context) {
         )
 
         Button(
+            colors = ButtonColors(Color(0XFFF39C12),Color.White, Color(0XFFF39C12), Color(0XFFF39C12)),
             onClick = {
                 if (emailState.isNotEmpty() && passwordState.isNotEmpty()) {
                     val user = User(emailState, passwordState)
@@ -125,13 +127,14 @@ fun LoginScreen(navController : NavController, context: Context) {
         Text(
             text = getString(id = R.string.dont_have_account),
             modifier = Modifier.clickable {
-                navController.navigate("SignUpScreen")
+                navController.navigate("signUpScreen") {
+                    popUpTo("loginScreen") {
+                        inclusive = true
+                    }
+                }
             },
             style = TextStyle(textDecoration = TextDecoration.None)
         )
-
-
-
     }
 
 }
