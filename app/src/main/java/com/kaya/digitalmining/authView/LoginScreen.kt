@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -124,17 +125,18 @@ fun LoginScreen(navController : NavController, context: Context) {
             Text(text = getString(id = R.string.sign_in))
         }
 
-        Text(
-            text = getString(id = R.string.dont_have_account),
-            modifier = Modifier.clickable {
-                navController.navigate("signUpScreen") {
-                    popUpTo("loginScreen") {
-                        inclusive = true
-                    }
+        Surface (onClick = {
+            navController.navigate("signUpScreen") {
+                popUpTo("loginScreen") {
+                    inclusive = true
                 }
-            },
-            style = TextStyle(textDecoration = TextDecoration.None)
-        )
+            }
+        }) {
+            Text(
+                text = getString(id = R.string.dont_have_account),
+                style = TextStyle(textDecoration = TextDecoration.None)
+            )
+        }
     }
 
 }

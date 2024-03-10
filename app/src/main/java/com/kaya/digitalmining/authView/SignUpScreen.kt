@@ -5,6 +5,7 @@ import android.content.Intent
 import android.text.TextUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -166,19 +168,20 @@ fun SignUpScreen(navController : NavController, context: Context){
             ) {
             Text(text = getString(id = R.string.sign_up))
         }
-        Text(
-            text = getString(id = R.string.already_have_an_account),
-            modifier = Modifier
-                .clickable {
-                    navController.navigate("loginScreen") {
-                        popUpTo("signUpScreen") {
-                            inclusive = true
-                        }
-                    }
-            },
 
-            style = TextStyle(textDecoration = TextDecoration.None)
-        )
+        Surface(onClick = {
+            navController.navigate("loginScreen") {
+                popUpTo("signUpScreen") {
+                    inclusive = true
+                }
+            }
+        }) {
+            Text(
+                text = getString(id = R.string.already_have_an_account),
+                style = TextStyle(textDecoration = TextDecoration.None)
+            )
+        }
+
 
     }
 
