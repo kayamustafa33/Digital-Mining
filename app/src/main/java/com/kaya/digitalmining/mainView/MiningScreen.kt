@@ -1,16 +1,14 @@
 package com.kaya.digitalmining.mainView
 
 import android.content.Context
-import android.opengl.Visibility
 import android.text.TextUtils
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -19,10 +17,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -45,101 +41,93 @@ import com.kaya.digitalmining.controller.HashController
 import com.kaya.digitalmining.model.Miner
 import com.kaya.digitalmining.service.FirebaseImplementor
 import com.kaya.digitalmining.util.SubsCardItem
-import com.kaya.digitalmining.util.getString
 import com.kaya.digitalmining.viewModel.MinerViewModel
-import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
 @Composable
-fun MiningScreen(context: Context){
-
+fun MiningScreen(context: Context) {
     val minerViewModel = viewModel<MinerViewModel>()
     val firebaseImplementor = FirebaseImplementor()
-
-    val cardList = remember { List(6) { index ->  "Item $index" } }
+    val cardList = List(6) { index -> "Item $index" }
 
     var remain by remember { mutableStateOf(context.getString(R.string.synchronization___)) }
     var diffState by remember { mutableLongStateOf(0L) }
     var hashVisibility by remember { mutableStateOf(true) }
-    var hash by remember{ mutableStateOf("") }
+    var hash by remember { mutableStateOf("") }
     var sdkCoin by remember { mutableIntStateOf(0) }
 
-    val dateController = DateController()
+    val dateController = DateController(context)
     val hashController = HashController()
 
-    // Can not take any data without user login!
     minerViewModel.getMinerData()
     minerViewModel.getTotalSdkNetworkAmount()
-
-    minerViewModel.minerData.observe(LocalLifecycleOwner.current){data ->
-        if(data != null){
-            dateController.countDownTimer(data.initDate, context)
-        }
+    
+    minerViewModel.minerData.observe(LocalLifecycleOwner.current) { data ->
+        data?.let { dateController.countDownTimer(it.initDate) }
     }
 
-    minerViewModel.totalSDKNetworkAmount.observe(LocalLifecycleOwner.current){ total ->
+    minerViewModel.totalSDKNetworkAmount.observe(LocalLifecycleOwner.current) { total ->
         sdkCoin = total
     }
 
-    dateController.remain.observe(LocalLifecycleOwner.current){
+    dateController.remain.observe(LocalLifecycleOwner.current) {
         remain = it
     }
 
-    dateController.diffState.observe(LocalLifecycleOwner.current){
+    dateController.diffState.observe(LocalLifecycleOwner.current) {
         diffState = it
     }
 
-    dateController.hashVisibility.observe(LocalLifecycleOwner.current){
+    dateController.hashVisibility.observe(LocalLifecycleOwner.current) {
         hashVisibility = it
     }
 
-    hashController.hashCoinText(diffState){
+    hashController.hashCoinText(diffState) {
         hash = it
     }
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-    ){
-            Text(
-                text = if(diffState > 0) hash else "",
-                color = Color.Gray,
-                modifier = Modifier
-                    .alpha(if (hashVisibility) 1f else 0f)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 10.dp)
-            )
+            .padding(16.dp)
+    ) {
+        Text(
+            text = if (diffState > 0) hash else "",
+            color = Color.Gray,
+            modifier = Modifier
+                .alpha(if (hashVisibility) 1f else 0f)
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 10.dp)
+        )
 
         Box(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 30.dp)
+                .fillMaxWidth()
+                .padding(top = 30.dp),
+            contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                progress = { 1F },
+            Box(
                 modifier = Modifier
-                    .size(200.dp),
-                color = Color(0XFFF39C12),
+                    .size(200.dp)
+                    .background(Color.Transparent, shape = CircleShape)
+                    .border(2.dp, Color(0xFFFFA500), shape = CircleShape)
             )
 
             Button(
                 onClick = {
-                    if(diffState <= 0){
-                        with(firebaseImplementor){
-                            firebaseAuth?.currentUser?.let {
-                                val minerId = UUID.randomUUID().toString()
-                                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                                val currentDate = Date()
-                                val formattedDate = dateFormat.format(currentDate)
-                                val miner = Miner(minerId,firebaseUser!!.uid,formattedDate.toString(),10)
-                                minerViewModel.setMinerData(miner){
-                                    //Show ads and register old miner data
-                                    minerViewModel.setOldMinerData(miner)
-                                }
+                    if (diffState <= 0) {
+                        firebaseImplementor.firebaseAuth?.currentUser?.let {
+                            val minerId = UUID.randomUUID().toString()
+                            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                            val currentDate = Date()
+                            val formattedDate = dateFormat.format(currentDate)
+                            val miner = Miner(minerId, firebaseImplementor.firebaseUser!!.uid, formattedDate.toString(), 10)
+                            minerViewModel.setMinerData(miner) {
+                                minerViewModel.setOldMinerData(miner)
                             }
                         }
                     }
@@ -147,12 +135,10 @@ fun MiningScreen(context: Context){
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(Color.Transparent),
                 contentPadding = PaddingValues(0.dp),
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(199.dp)
-                ) {
+                modifier = Modifier.size(199.dp)
+            ) {
                 Text(
-                    text = if(TextUtils.isEmpty(remain).not()) remain else getString(id = R.string.tap_to_mine),
+                    text = if (TextUtils.isEmpty(remain).not()) remain else context.getString(R.string.tap_to_mine),
                     fontSize = 20.sp,
                     color = Color(0XFFF5B041)
                 )
@@ -168,11 +154,10 @@ fun MiningScreen(context: Context){
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
-            contentPadding = PaddingValues(8.dp),
-            modifier = Modifier.padding(top = 30.dp)
+            contentPadding = PaddingValues(8.dp)
         ) {
-            items(cardList){
-                SubsCardItem(text = it, LocalContext.current)
+            items(cardList) { item ->
+                SubsCardItem(text = item, context)
             }
         }
     }
@@ -180,6 +165,6 @@ fun MiningScreen(context: Context){
 
 @Preview
 @Composable
-fun ShowMiningScreen(){
+fun ShowMiningScreenPreview() {
     MiningScreen(LocalContext.current)
 }

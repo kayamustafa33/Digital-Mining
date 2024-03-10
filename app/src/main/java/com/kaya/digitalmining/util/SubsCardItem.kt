@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,32 +18,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
-fun SubsCardItem(text: String,context: Context) {
+fun SubsCardItem(text: String, context: Context) {
     Card(
         modifier = Modifier.padding(8.dp)
             .height(100.dp),
-        backgroundColor = Color.Gray,
-        elevation = 8.dp,
+        colors = CardColors(Color(0xFF283747),Color(0xFF283747),Color(0xFF283747),Color(0xFF283747)),
         onClick = {
-            Toast.makeText(context,"Test",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Test", Toast.LENGTH_SHORT).show()
         }
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = text,
-                modifier = Modifier.align(Alignment.Center),
                 color = Color.White,
                 fontSize = 20.sp
             )
         }
     }
 }
+
 
 @Preview
 @Composable
