@@ -3,6 +3,7 @@ package com.kaya.digitalmining.authView
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -136,25 +137,38 @@ fun SignUpScreen(navController : NavController, context: Context){
                           && TextUtils.isEmpty(password).not()
                           && TextUtils.isEmpty(confirmPassword).not()){
 
-                          showDialog = true
+                          if(password == confirmPassword){
+                              if(password.length >= 6){
+                                  showDialog = true
 
-                          val user = User(email,password)
-                          val auth = Auth()
+                                  val user = User(email,password)
+                                  val auth = Auth()
 
-                          email = ""
-                          password = ""
-                          confirmPassword = ""
+                                  email = ""
+                                  password = ""
+                                  confirmPassword = ""
 
-                          auth.registerUser(user){
-                              if(it){
-                                  showDialog = false
-                                  Intent(context,MainActivity::class.java).also { intent ->
-                                        context.startActivity(intent)
+                                  auth.registerUser(user){
+                                      if(it){
+                                          showDialog = false
+                                          Intent(context,MainActivity::class.java).also { intent ->
+                                              context.startActivity(intent)
+                                          }
+                                      }else {
+                                          showDialog = false
+                                      }
                                   }
-                              }else {
+                              } else {
                                   showDialog = false
+                                  Toast.makeText(context,"Passwords length should be greater than 6!",Toast.LENGTH_SHORT).show()
                               }
+
+                          } else {
+                              showDialog = false
+                              Toast.makeText(context,"Passwords don't matches!",Toast.LENGTH_SHORT).show()
                           }
+
+
                       } else {
                           showDialog = false
                       }
