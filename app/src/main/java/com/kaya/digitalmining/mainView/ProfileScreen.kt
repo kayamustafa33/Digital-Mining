@@ -1,30 +1,32 @@
 package com.kaya.digitalmining.mainView
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,9 +35,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.R
+import com.kaya.digitalmining.util.ProfileItems
 
 @Composable
-fun ProfileScreen(navController: NavController){
+fun ProfileScreen(context: Context,navController: NavController){
+
+    val profileCardItems = listOf(
+        Triple(0xff5DADE2.toInt(), R.drawable.wallet, "Wallet"),
+        Triple(0xff82E0AA.toInt(), R.drawable.history, "Mining History"),
+        Triple(0xffF5B041.toInt(), R.drawable.settings, "Settings")
+    )
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -59,7 +69,7 @@ fun ProfileScreen(navController: NavController){
                     .padding(30.dp)
                     .size(150.dp)
                     .clip(CircleShape),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
             )
 
             Text(text = "User ID", style = TextStyle(color = Color.White, fontSize = 20.sp))
@@ -67,53 +77,28 @@ fun ProfileScreen(navController: NavController){
             Spacer(modifier = Modifier.padding(top = 50.dp))
         Card (
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
+                .weight(1f),
+            colors = CardColors(MaterialTheme.colorScheme.background,MaterialTheme.colorScheme.background,MaterialTheme.colorScheme.background,MaterialTheme.colorScheme.background),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 6.dp
             ),
             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
         ){
-            Row(
-                modifier = Modifier
-                    .padding(30.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Card(
-                    modifier = Modifier.size(50.dp),
-                    colors = CardColors(Color(0xff5DADE2),Color(0xff5DADE2),Color(0xff5DADE2),Color(0xff5DADE2)),
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 3.dp
-                    ),
-                ) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Image(
-                            modifier = Modifier.size(24.dp),
-                            painter = painterResource(id = R.drawable.wallet),
-                            contentDescription = null
-                        )
+            LazyColumn {
+                profileCardItems.forEachIndexed { index, (cardColors, boxIcon, rowText) ->
+                    item {
+                        Surface (
+                            color = MaterialTheme.colorScheme.background,
+                            onClick = {
+                                Toast.makeText(context, profileCardItems[index].third,Toast.LENGTH_SHORT).show()
+                            }
+                        ) {
+                            ProfileItems(cardColors = cardColors, boxIcon = boxIcon, rowText = rowText)
+                        }
+
                     }
                 }
-
-                Column(
-                    modifier = Modifier
-                        .padding(start = 20.dp),
-                ) {
-                    Text(
-                        text = "Wallet",
-                        fontSize = 20.sp,
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = null,
-                    modifier = Modifier.size(30.dp)
-                )
             }
-
         }
         }
     }
@@ -122,5 +107,5 @@ fun ProfileScreen(navController: NavController){
 @Preview
 @Composable
 fun Test(){
-    ProfileScreen(navController = rememberNavController())
+    ProfileScreen(LocalContext.current,navController = rememberNavController())
 }
