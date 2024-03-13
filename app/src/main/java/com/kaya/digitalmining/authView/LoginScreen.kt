@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -41,6 +43,7 @@ import com.kaya.digitalmining.R
 import com.kaya.digitalmining.controller.Auth
 import com.kaya.digitalmining.mainView.MainActivity
 import com.kaya.digitalmining.model.User
+import com.kaya.digitalmining.util.CustomProgressDialog
 import com.kaya.digitalmining.util.getString
 
 @Composable
@@ -48,6 +51,7 @@ fun LoginScreen(navController : NavController, context: Context) {
 
     var emailState by remember { mutableStateOf("") }
     var passwordState by remember { mutableStateOf("") }
+    var showDialog by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
 
@@ -103,13 +107,19 @@ fun LoginScreen(navController : NavController, context: Context) {
             colors = ButtonColors(Color(0XFFF39C12),Color.White, Color(0XFFF39C12), Color(0XFFF39C12)),
             onClick = {
                 if (emailState.isNotEmpty() && passwordState.isNotEmpty()) {
+                    showDialog = true
                     val user = User(emailState, passwordState)
                     val authentication = Auth()
+                    emailState = ""
+                    passwordState = ""
                     authentication.authUser(user) {
                         if (it) {
+                            showDialog = false
                             Intent(context, MainActivity::class.java).also { intent ->
                                 context.startActivity(intent)
                             }
+                        }else {
+                            showDialog = false
                         }
                     }
                 }
@@ -132,6 +142,17 @@ fun LoginScreen(navController : NavController, context: Context) {
                 text = getString(id = R.string.dont_have_account),
                 style = TextStyle(textDecoration = TextDecoration.None)
             )
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center),
+        contentAlignment = Alignment.Center
+    ) {
+        if(showDialog){
+            CustomProgressDialog(isVisible = true)
         }
     }
 
