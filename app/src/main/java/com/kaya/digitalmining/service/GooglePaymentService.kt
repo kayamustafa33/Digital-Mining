@@ -44,6 +44,15 @@ class GooglePaymentService : BillingClientConnectionListener, ViewModel(){
                     productList[2] -> {
                         isPurchased.value = true
                     }
+                    productList[3] -> {
+                        isPurchased.value = true
+                    }
+                    productList[4] -> {
+                        isPurchased.value = true
+                    }
+                    productList[5] -> {
+                        isPurchased.value = true
+                    }
                 }
             }
 

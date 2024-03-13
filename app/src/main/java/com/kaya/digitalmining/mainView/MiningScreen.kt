@@ -1,7 +1,6 @@
 package com.kaya.digitalmining.mainView
 
 import android.content.Context
-import android.text.TextUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -40,26 +39,29 @@ import com.kaya.digitalmining.R
 import com.kaya.digitalmining.controller.DateController
 import com.kaya.digitalmining.controller.HashController
 import com.kaya.digitalmining.model.Miner
+import com.kaya.digitalmining.paymentService.serviceData.IapConnector
 import com.kaya.digitalmining.service.FirebaseImplementor
+import com.kaya.digitalmining.service.GooglePaymentService
 import com.kaya.digitalmining.util.SubsCardItem
 import com.kaya.digitalmining.viewModel.MinerViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.Timer
 import java.util.UUID
-import kotlin.concurrent.timerTask
 
 @Composable
 fun MiningScreen(context: Context) {
     val minerViewModel = viewModel<MinerViewModel>()
     val firebaseImplementor = FirebaseImplementor()
-    val cardList = List(6) { index -> "Item $index" }
+    val cardInfoList: List<Triple<String, String, Context>> = listOf(
+        Triple("Mining rate 15", "3$", context),
+        Triple("Mining rate 20", "5$", context),
+        Triple("Mining rate 25", "8$", context),
+        Triple("Mining rate 30", "10$", context),
+        Triple("Mining rate 35", "13$", context),
+        Triple("Mining rate 40", "15$", context)
+    )
 
     var remain by remember { mutableStateOf(context.getString(R.string.synchronization___)) }
     var diffState by remember { mutableLongStateOf(0L) }
@@ -166,11 +168,11 @@ fun MiningScreen(context: Context) {
         )
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+            columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(8.dp)
         ) {
-            items(cardList) { item ->
-                SubsCardItem(text = item, context)
+            items(cardInfoList) { item ->
+                SubsCardItem(productName = item.first, price = item.second,item.third)
             }
         }
     }

@@ -1,11 +1,16 @@
 package com.kaya.digitalmining.util
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Text
@@ -17,28 +22,50 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kaya.digitalmining.paymentService.serviceData.IapConnector
+import com.kaya.digitalmining.service.GooglePaymentService
 
 
 @Composable
-fun SubsCardItem(text: String, context: Context) {
+fun SubsCardItem(productName: String, price : String, context: Context) {
+
+    val packageList = listOf("3$","5$","8$","10$","13$","15$")
+    val productIDList = mutableListOf("premium1","premium2","premium3","premium4","premium5","premium6")
+    var selectedProductID : String?
+    val googlePaymentService : GooglePaymentService = viewModel()
+    val iapConnector : IapConnector = googlePaymentService.connectPayment(productIDList,context)
+    val productPriceMap = packageList.zip(productIDList).toMap()
+
     Card(
-        modifier = Modifier.padding(8.dp)
-            .height(100.dp),
+        modifier = Modifier
+            .padding(8.dp)
+            .height(150.dp)
+            .fillMaxWidth(),
         colors = CardColors(Color(0xFF283747),Color(0xFF283747),Color(0xFF283747),Color(0xFF283747)),
         onClick = {
-            Toast.makeText(context, "Test", Toast.LENGTH_SHORT).show()
+            selectedProductID = productPriceMap[price]
+            iapConnector.purchase(context as Activity,selectedProductID!!)
+            Toast.makeText(context,selectedProductID,Toast.LENGTH_SHORT).show()
         }
     ) {
-        Box(
+        Column (
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally        ){
             Text(
-                text = text,
+                text = productName,
                 color = Color.White,
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                modifier = Modifier.padding(8.dp)
+            )
+
+            Text(
+                text = price,
+                color = Color.White,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(8.dp)
             )
         }
     }
@@ -48,5 +75,5 @@ fun SubsCardItem(text: String, context: Context) {
 @Preview
 @Composable
 fun ShowCard(){
-    SubsCardItem(text = "it", LocalContext.current)
+    SubsCardItem(productName = "Mining rate => 15", price = "3$" ,LocalContext.current)
 }
