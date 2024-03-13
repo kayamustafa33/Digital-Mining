@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -42,10 +43,17 @@ import com.kaya.digitalmining.model.Miner
 import com.kaya.digitalmining.service.FirebaseImplementor
 import com.kaya.digitalmining.util.SubsCardItem
 import com.kaya.digitalmining.viewModel.MinerViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.Timer
 import java.util.UUID
+import kotlin.concurrent.timerTask
 
 @Composable
 fun MiningScreen(context: Context) {
@@ -59,12 +67,17 @@ fun MiningScreen(context: Context) {
     var hash by remember { mutableStateOf("") }
     var sdkCoin by remember { mutableIntStateOf(0) }
 
+    LaunchedEffect(Unit) {
+        remain = context.getString(R.string.synchronization___)
+        delay(1000)
+    }
+
     val dateController = DateController(context)
     val hashController = HashController()
 
     minerViewModel.getMinerData()
     minerViewModel.getTotalSdkNetworkAmount()
-    
+
     minerViewModel.minerData.observe(LocalLifecycleOwner.current) { data ->
         data?.let { dateController.countDownTimer(it.initDate) }
     }
@@ -138,7 +151,7 @@ fun MiningScreen(context: Context) {
                 modifier = Modifier.size(199.dp)
             ) {
                 Text(
-                    text = if (TextUtils.isEmpty(remain).not()) remain else context.getString(R.string.tap_to_mine),
+                    text = if(diffState <= 0L && hashVisibility.not()) context.getString(R.string.tap_to_mine) else remain,
                     fontSize = 20.sp,
                     color = Color(0XFFF5B041)
                 )
