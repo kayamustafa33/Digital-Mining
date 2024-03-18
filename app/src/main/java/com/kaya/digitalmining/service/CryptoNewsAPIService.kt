@@ -15,6 +15,6 @@ class CryptoNewsAPIService {
         .build()
         .create(CryptoNewsAPI::class.java)
 
-    suspend fun getCryptoNews() = api.getCryptoNews()
+    suspend fun getNews() = api.getCryptoNews()
 
 }

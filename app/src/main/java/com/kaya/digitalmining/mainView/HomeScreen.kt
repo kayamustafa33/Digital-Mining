@@ -34,11 +34,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.kaya.digitalmining.R
+import com.kaya.digitalmining.viewModel.NewsViewModel
 
 @Composable
 fun HomeScreen(navController: NavController) {
+
+    val newsViewModel = viewModel<NewsViewModel>()
+    newsViewModel.getCryptoNews()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -88,7 +93,9 @@ fun HomeScreen(navController: NavController) {
                         contentScale = ContentScale.FillWidth
                     )
 
-                    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 10.dp)) {
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
                         Text(
                             text = "Title",
                             fontSize = 18.sp
