@@ -91,6 +91,10 @@ dependencies {
     implementation ("com.google.pay.button:compose-pay-button:0.1.0-beta03")
     implementation ("com.google.wallet.button:compose-wallet-button:0.1.0-beta01")
 
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     val billingVersion = "6.1.0"
     implementation("com.android.billingclient:billing:$billingVersion")
     implementation("com.android.billingclient:billing-ktx:$billingVersion")
