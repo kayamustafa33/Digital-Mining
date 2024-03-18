@@ -3,6 +3,7 @@ package com.kaya.digitalmining.mainView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,6 +49,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.model.New
 import com.kaya.digitalmining.model.News
+import com.kaya.digitalmining.util.CustomProgressDialog
 import com.kaya.digitalmining.viewModel.NewsViewModel
 import io.reactivex.Observer
 
@@ -56,12 +58,14 @@ import io.reactivex.Observer
 fun HomeScreen(navController: NavController) {
 
     val newsViewModel = viewModel<NewsViewModel>()
+    var progressState by remember { mutableStateOf(true) }
     var cryptoNewsList by remember { mutableStateOf(emptyList<New>()) }
 
     newsViewModel.getCryptoNews()
     newsViewModel.newsData.observe(LocalLifecycleOwner.current) { news ->
         if (news != null) {
             cryptoNewsList = news.news
+            progressState = false
         }
     }
 
@@ -97,6 +101,11 @@ fun HomeScreen(navController: NavController) {
         )
 
         SearchView()
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
+            CustomProgressDialog(isVisible = progressState)
+        }
 
         LazyColumn(modifier = Modifier
             .fillMaxWidth()
@@ -107,9 +116,13 @@ fun HomeScreen(navController: NavController) {
                     GlideImage(
                         model = cryptoNewsList[it].image,
                         contentDescription = "crypto-image",
-                        modifier = Modifier.height(100.dp).width(100.dp).padding(top = 10.dp),
+                        modifier = Modifier
+                            .height(100.dp)
+                            .width(100.dp)
+                            .padding(top = 10.dp),
                         contentScale = ContentScale.Fit) { request ->
                         request.error(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.progress_animation)
                     }
 
                     Column(
@@ -135,6 +148,7 @@ fun HomeScreen(navController: NavController) {
                     }
                 }
             }
+
         }
 
     }
@@ -175,6 +189,11 @@ fun SearchView() {
             }
         )
     )
+}
+
+@Composable
+fun Progress(isVisible: Boolean) {
+    CustomProgressDialog(isVisible = isVisible)
 }
 
 
