@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface CryptoNewsAPI {
 
-    @GET("erhansennx/Crypto-JSON/blob/main/crypto_news.json")
+    @GET("crypto-json/crypto_news.json")
     suspend fun getCryptoNews() : Response<News>
 
 }
