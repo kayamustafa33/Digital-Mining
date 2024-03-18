@@ -100,6 +100,10 @@ dependencies {
     implementation("io.reactivex.rxjava2:rxjava:2.2.6")
     implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
 
+    // Glide
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+
+
     val billingVersion = "6.1.0"
     implementation("com.android.billingclient:billing:$billingVersion")
     implementation("com.android.billingclient:billing-ktx:$billingVersion")

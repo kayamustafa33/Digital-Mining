@@ -2,9 +2,11 @@ package com.kaya.digitalmining.mainView
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,26 +26,41 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.kaya.digitalmining.R
+import com.kaya.digitalmining.model.New
+import com.kaya.digitalmining.model.News
 import com.kaya.digitalmining.viewModel.NewsViewModel
+import io.reactivex.Observer
 
 @Composable
 fun HomeScreen(navController: NavController) {
 
     val newsViewModel = viewModel<NewsViewModel>()
+    var cryptoNewsList by remember { mutableStateOf(emptyList<New>()) }
+
     newsViewModel.getCryptoNews()
+    newsViewModel.newsData.observe(LocalLifecycleOwner.current) { news ->
+        if (news != null) {
+            cryptoNewsList = news.news
+        }
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -81,8 +98,8 @@ fun HomeScreen(navController: NavController) {
         LazyColumn(modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 25.dp, vertical = 5.dp)) {
-            items(10) {
-                Row(modifier = Modifier.fillMaxWidth()) {
+            items(cryptoNewsList.size) {
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_launcher_background),
                         contentDescription = "Test",
@@ -93,13 +110,26 @@ fun HomeScreen(navController: NavController) {
                         contentScale = ContentScale.FillWidth
                     )
 
-                    Column(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 10.dp, vertical = 10.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.Start) {
+
                         Text(
-                            text = "Title",
-                            fontSize = 18.sp
+                            text = cryptoNewsList[it].title,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
                         )
+
+                        Text(
+                            text = cryptoNewsList[it].content,
+                            maxLines = 2,
+                            fontSize = 14.sp,
+                            overflow = TextOverflow.Ellipsis
+                        )
+
                     }
                 }
             }
@@ -146,7 +176,7 @@ fun SearchView() {
 }
 
 
-@Preview
+@Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
     val navController = NavController(LocalContext.current)
