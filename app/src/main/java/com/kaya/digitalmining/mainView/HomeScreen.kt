@@ -43,12 +43,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.model.New
 import com.kaya.digitalmining.model.News
 import com.kaya.digitalmining.viewModel.NewsViewModel
 import io.reactivex.Observer
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun HomeScreen(navController: NavController) {
 
@@ -88,7 +91,7 @@ fun HomeScreen(navController: NavController) {
             contentDescription = "Test",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp)
+                .height(200.dp)
                 .padding(25.dp, 15.dp),
             contentScale = ContentScale.FillWidth
         )
@@ -100,15 +103,14 @@ fun HomeScreen(navController: NavController) {
             .padding(horizontal = 25.dp, vertical = 5.dp)) {
             items(cryptoNewsList.size) {
                 Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
-                        contentDescription = "Test",
-                        modifier = Modifier
-                            .height(100.dp)
-                            .width(100.dp)
-                            .padding(top = 10.dp),
-                        contentScale = ContentScale.FillWidth
-                    )
+
+                    GlideImage(
+                        model = cryptoNewsList[it].image,
+                        contentDescription = "crypto-image",
+                        modifier = Modifier.height(100.dp).width(100.dp).padding(top = 10.dp),
+                        contentScale = ContentScale.Fit) { request ->
+                        request.error(R.drawable.ic_launcher_background)
+                    }
 
                     Column(
                         modifier = Modifier
