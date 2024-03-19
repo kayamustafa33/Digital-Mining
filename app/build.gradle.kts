@@ -103,6 +103,9 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 
+    // Accompanist-Pager
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
 
     val billingVersion = "6.1.0"
     implementation("com.android.billingclient:billing:$billingVersion")
