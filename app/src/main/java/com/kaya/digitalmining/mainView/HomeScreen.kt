@@ -90,7 +90,7 @@ fun HomeScreen(navController: NavController) {
             .background(Color.White)
     ) {
 
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         Text(
             text = "Current Date",
@@ -107,14 +107,14 @@ fun HomeScreen(navController: NavController) {
             modifier = Modifier.padding(start = 25.dp)
         )
 
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(5.dp))
         ImageSlider(cryptoNewsList)
 
-        SearchView(cryptoNewsList) { searchText ->
+        SearchView() { searchText ->
             filteredList = performSearch(searchText, cryptoNewsList)
         }
 
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(5.dp))
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
             CustomProgressDialog(isVisible = progressState)
         }
@@ -182,7 +182,7 @@ fun HomeScreen(navController: NavController) {
 }
 
 @Composable
-fun SearchView(cryptoNewsList: List<New>, onSearch: (String) -> Unit) {
+fun SearchView(onSearch: (String) -> Unit) {
     var searchText by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
 
