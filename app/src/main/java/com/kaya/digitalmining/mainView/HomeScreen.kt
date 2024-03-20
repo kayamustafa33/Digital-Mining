@@ -1,5 +1,6 @@
 package com.kaya.digitalmining.mainView
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material.icons.Icons
@@ -38,6 +40,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -70,12 +73,14 @@ fun HomeScreen(navController: NavController) {
     val newsViewModel = viewModel<NewsViewModel>()
     var progressState by remember { mutableStateOf(true) }
     var cryptoNewsList by remember { mutableStateOf(emptyList<New>()) }
+    var filteredList by remember { mutableStateOf(emptyList<New>()) }
 
     newsViewModel.getCryptoNews()
     newsViewModel.newsData.observe(LocalLifecycleOwner.current) { news ->
         if (news != null) {
             cryptoNewsList = news.news
             progressState = false
+            filteredList = cryptoNewsList
         }
     }
 
@@ -95,7 +100,7 @@ fun HomeScreen(navController: NavController) {
         )
 
         Text(
-            text = "Welcome User!",
+            text = "Welcome, User \uD83D\uDC4B",
             color = Color.Black,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
@@ -105,9 +110,11 @@ fun HomeScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(15.dp))
         ImageSlider(cryptoNewsList)
 
-        SearchView()
-        Spacer(modifier = Modifier.height(15.dp))
+        SearchView(cryptoNewsList) { searchText ->
+            filteredList = performSearch(searchText, cryptoNewsList)
+        }
 
+        Spacer(modifier = Modifier.height(15.dp))
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
             CustomProgressDialog(isVisible = progressState)
         }
@@ -117,7 +124,7 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxWidth()
                 .padding(horizontal = 25.dp, vertical = 5.dp)
         ) {
-            items(cryptoNewsList.size) {
+            items(filteredList.size) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -131,7 +138,7 @@ fun HomeScreen(navController: NavController) {
                             .padding(top = 10.dp)
                     ) {
                         GlideImage(
-                            model = cryptoNewsList[it].image,
+                            model = filteredList[it].image,
                             contentDescription = "crypto-image",
                             modifier = Modifier
                                 .fillMaxSize()
@@ -153,13 +160,13 @@ fun HomeScreen(navController: NavController) {
                     ) {
 
                         Text(
-                            text = cryptoNewsList[it].title,
+                            text = filteredList[it].title,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
 
                         Text(
-                            text = cryptoNewsList[it].content,
+                            text = filteredList[it].content,
                             maxLines = 2,
                             fontSize = 14.sp,
                             overflow = TextOverflow.Ellipsis
@@ -168,24 +175,26 @@ fun HomeScreen(navController: NavController) {
                     }
                 }
             }
-
         }
-
     }
 
 
 }
 
 @Composable
-fun SearchView() {
+fun SearchView(cryptoNewsList: List<New>, onSearch: (String) -> Unit) {
     var searchText by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 25.dp),
         value = searchText,
-        onValueChange = { searchText = it },
+        onValueChange = {
+            searchText = it
+            onSearch(searchText)
+        },
         label = { Text("Search") },
         singleLine = true,
         colors = OutlinedTextFieldDefaults.colors(
@@ -205,10 +214,16 @@ fun SearchView() {
         ),
         keyboardActions = KeyboardActions(
             onSearch = {
-
+                keyboardController?.hide()
             }
         )
     )
+}
+
+private fun performSearch(searchText: String, cryptoNewsList: List<New>): List<New> {
+    return cryptoNewsList.filter {
+        it.title.contains(searchText, ignoreCase = true)
+    }
 }
 
 @Composable
@@ -260,7 +275,8 @@ fun ImageSlider(cryptoNewsList: List<New>) {
                 GlideImage(
                     model = cryptoNewsList[page].image,
                     contentDescription = "crypto-image-slider",
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .height(100.dp),
                     contentScale = ContentScale.Crop
                 ) { request ->
