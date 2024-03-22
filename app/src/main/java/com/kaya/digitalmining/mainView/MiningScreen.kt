@@ -2,22 +2,26 @@ package com.kaya.digitalmining.mainView
 
 import android.app.Activity
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,8 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,8 +48,9 @@ import com.kaya.digitalmining.controller.HashController
 import com.kaya.digitalmining.model.Miner
 import com.kaya.digitalmining.service.AdMobRewardedAd
 import com.kaya.digitalmining.service.FirebaseImplementor
+import com.kaya.digitalmining.util.BottomSheetScreen
+import com.kaya.digitalmining.util.ClickableText
 import com.kaya.digitalmining.util.CustomProgressDialog
-import com.kaya.digitalmining.util.SubsCardItem
 import com.kaya.digitalmining.viewModel.MinerViewModel
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -57,15 +66,6 @@ fun MiningScreen(context: Context) {
     val hashController by lazy { HashController() }
     val firebaseImplementor by lazy { FirebaseImplementor() }
 
-    val cardInfoList: List<Triple<String, String, Context>> = listOf(
-        Triple("Mining rate 15", "3$", context),
-        Triple("Mining rate 20", "5$", context),
-        Triple("Mining rate 25", "8$", context),
-        Triple("Mining rate 30", "10$", context),
-        Triple("Mining rate 35", "13$", context),
-        Triple("Mining rate 40", "15$", context)
-    )
-
     val remain = remember { mutableStateOf(context.getString(R.string.synchronization___)) }
     val diffState = remember { mutableLongStateOf(0L) }
     val hashVisibility = remember { mutableStateOf(true) }
@@ -73,6 +73,9 @@ fun MiningScreen(context: Context) {
     val sdkCoin = remember { mutableIntStateOf(0) }
     val localLifecycleOwner = LocalLifecycleOwner.current
     val showDialog = remember { mutableStateOf(false) }
+    val showSheet = remember { mutableStateOf(false) }
+    val clipboardManager = LocalClipboardManager.current
+    val sdkNetworkWalletAddress = "0x1dD0c77E499e6e98359cAE3a7F509def94b14cC7"
 
     LaunchedEffect(Unit) {
         remain.value = context.getString(R.string.synchronization___)
@@ -81,16 +84,19 @@ fun MiningScreen(context: Context) {
 
     val adListenerViewModel = AdMobRewardedAd()
 
-    LaunchedEffect(Unit) {
+    if (showSheet.value) {
+        BottomSheetScreen(context) {
+            showSheet.value = false
+        }
+    }
 
-        minerViewModel.getMinerData()
-        minerViewModel.getTotalSdkNetworkAmount()
+    minerViewModel.getMinerData()
+    minerViewModel.getTotalSdkNetworkAmount()
+
+    LaunchedEffect(Unit) {
 
         dateController.remain.observe(localLifecycleOwner) {
             remain.value = it
-        }
-        hashController.hashCoinText(diffState.longValue) {
-            hash.value = it
         }
 
         dateController.diffState.observe(localLifecycleOwner) {
@@ -110,20 +116,29 @@ fun MiningScreen(context: Context) {
         }
     }
 
+    hashController.hashCoinText(diffState.longValue) {
+        hash.value = it
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp)
+            .background(Color(0xff154360))
+            .padding(16.dp),
     ) {
-        Text(
-            text = if (diffState.longValue > 0) hash.value else "",
-            color = Color.Gray,
+        Box(
             modifier = Modifier
-                .alpha(if (hashVisibility.value) 1f else 0f)
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 10.dp)
-        )
+                .fillMaxWidth()
+                .padding(top = 10.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Text(
+                text = if (diffState.longValue > 0) hash.value else "",
+                color = Color.Gray,
+                modifier = Modifier
+                    .alpha(if (hashVisibility.value) 1f else 0f),
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -135,7 +150,7 @@ fun MiningScreen(context: Context) {
                 modifier = Modifier
                     .size(200.dp)
                     .background(Color.Transparent, shape = CircleShape)
-                    .border(2.dp, Color(0xFFFFA500), shape = CircleShape)
+                    .border(4.dp, Color(0xff58D68D), shape = CircleShape)
             )
 
             Button(
@@ -173,24 +188,53 @@ fun MiningScreen(context: Context) {
                 Text(
                     text = if(diffState.longValue <= 0L && hashVisibility.value.not()) context.getString(R.string.tap_to_mine) else remain.value,
                     fontSize = 20.sp,
-                    color = Color(0XFFF5B041)
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xff58D68D)
                 )
             }
         }
 
         Text(
-            text = sdkCoin.intValue.toString(),
+            text = sdkCoin.intValue.toString() + " " + "SDKN",
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(10.dp)
+                .padding(10.dp),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xff58D68D)
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(8.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            items(cardInfoList) { item ->
-                SubsCardItem(productName = item.first, price = item.second,item.third)
+            Icon(
+                painter = painterResource(id = R.drawable.wallet),
+                contentDescription = "Wallet Icon",
+                tint = Color.Gray,
+                modifier = Modifier
+                    .size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            // Add user wallet address
+            ClickableText(text = sdkNetworkWalletAddress) {
+                clipboardManager.setText(AnnotatedString(sdkNetworkWalletAddress))
+                Toast.makeText(context,"Kopyalandı, şimdi zenginsin kaşmer!",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        Column(
+            modifier =  Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            ElevatedButton(
+                onClick = { showSheet.value = true },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Mining Rate")
             }
         }
     }

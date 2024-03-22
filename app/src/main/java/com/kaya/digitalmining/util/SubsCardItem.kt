@@ -40,7 +40,7 @@ fun SubsCardItem(productName: String, price : String, context: Context) {
             .padding(8.dp)
             .height(150.dp)
             .fillMaxWidth(),
-        colors = CardColors(Color(0xFF283747),Color(0xFF283747),Color(0xFF283747),Color(0xFF283747)),
+        colors = CardColors(Color(0xff154360),Color(0xff154360),Color(0xff154360),Color(0xff154360)),
         onClick = {
             selectedProductID = productPriceMap[price]
             iapConnector.purchase(context as Activity,selectedProductID!!)
