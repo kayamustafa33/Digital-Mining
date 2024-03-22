@@ -29,6 +29,11 @@
             android:theme="@style/Theme.DigitalMining">
         </activity>
 
+        <!-- Admob Init -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2292596646368029~5832805167"/>
+
     </application>
 
 </manifest>
