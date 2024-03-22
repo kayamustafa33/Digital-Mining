@@ -20,10 +20,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -52,11 +50,10 @@ import com.kaya.digitalmining.util.getString
 
 @Composable
 fun SignUpScreen(navController : NavController, context: Context){
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-
-    var showDialog by remember { mutableStateOf(false) }
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val confirmPassword = remember { mutableStateOf("") }
+    val showDialog = remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -79,8 +76,8 @@ fun SignUpScreen(navController : NavController, context: Context){
         )
 
         OutlinedTextField(
-            value = email,
-            onValueChange = {email = it},
+            value = email.value,
+            onValueChange = {email.value = it},
             label = { Text(text = "E-mail Address")},
             singleLine = true,
             modifier = Modifier
@@ -96,8 +93,8 @@ fun SignUpScreen(navController : NavController, context: Context){
         )
 
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = password.value,
+            onValueChange = { password.value = it },
             label = { Text("Password") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -113,8 +110,8 @@ fun SignUpScreen(navController : NavController, context: Context){
         )
 
         OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            value = confirmPassword.value,
+            onValueChange = { confirmPassword.value = it },
             label = { Text("Confirm Password") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,44 +130,44 @@ fun SignUpScreen(navController : NavController, context: Context){
         Button(
             onClick = {
                       if(password == confirmPassword
-                          && TextUtils.isEmpty(email).not()
-                          && TextUtils.isEmpty(password).not()
-                          && TextUtils.isEmpty(confirmPassword).not()){
+                          && TextUtils.isEmpty(email.value).not()
+                          && TextUtils.isEmpty(password.value).not()
+                          && TextUtils.isEmpty(confirmPassword.value).not()){
 
                           if(password == confirmPassword){
-                              if(password.length >= 6){
-                                  showDialog = true
+                              if(password.value.length >= 6){
+                                  showDialog.value = true
 
-                                  val user = User(email,password)
+                                  val user = User(email.value,password.value)
                                   val auth = Auth()
 
-                                  email = ""
-                                  password = ""
-                                  confirmPassword = ""
+                                  email.value = ""
+                                  password.value = ""
+                                  confirmPassword.value = ""
 
                                   auth.registerUser(user){
                                       if(it){
-                                          showDialog = false
+                                          showDialog.value = false
                                           Intent(context,MainActivity::class.java).also { intent ->
                                               context.startActivity(intent)
                                           }
                                       }else {
-                                          showDialog = false
+                                          showDialog.value = false
                                       }
                                   }
                               } else {
-                                  showDialog = false
+                                  showDialog.value = false
                                   Toast.makeText(context,"Passwords length should be greater than 6!",Toast.LENGTH_SHORT).show()
                               }
 
                           } else {
-                              showDialog = false
+                              showDialog.value = false
                               Toast.makeText(context,"Passwords don't matches!",Toast.LENGTH_SHORT).show()
                           }
 
 
                       } else {
-                          showDialog = false
+                          showDialog.value = false
                       }
             },
             colors = ButtonColors(Color(0xFF3498DB),Color.White, Color(0xFF3498DB), Color(0xFF3498DB)),
@@ -203,7 +200,7 @@ fun SignUpScreen(navController : NavController, context: Context){
             .wrapContentSize(Alignment.Center),
         contentAlignment = Alignment.Center
     ) {
-        if(showDialog){
+        if(showDialog.value){
             CustomProgressDialog(isVisible = true)
         }
     }

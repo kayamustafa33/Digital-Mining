@@ -1,7 +1,5 @@
-package com.kaya.digitalmining.mainView
+package com.kaya.digitalmining.mainView.news
 
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material.icons.Icons
@@ -48,11 +45,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -70,19 +65,24 @@ import kotlin.math.absoluteValue
 @Composable
 fun HomeScreen(navController: NavController) {
 
-    val newsViewModel = viewModel<NewsViewModel>()
-    var progressState by remember { mutableStateOf(true) }
-    var cryptoNewsList by remember { mutableStateOf(emptyList<New>()) }
-    var filteredList by remember { mutableStateOf(emptyList<New>()) }
+    val newsViewModel by lazy { NewsViewModel() }
+    val progressState = remember { mutableStateOf(true) }
+    val cryptoNewsList = remember { mutableStateOf(emptyList<New>()) }
+    val filteredList = remember { mutableStateOf(emptyList<New>()) }
+    val localLifecycleOwner = LocalLifecycleOwner.current
 
     newsViewModel.getCryptoNews()
-    newsViewModel.newsData.observe(LocalLifecycleOwner.current) { news ->
-        if (news != null) {
-            cryptoNewsList = news.news
-            progressState = false
-            filteredList = cryptoNewsList
+
+    LaunchedEffect(Unit) {
+        newsViewModel.newsData.observe(localLifecycleOwner) { news ->
+            if (news != null) {
+                cryptoNewsList.value = news.news
+                progressState.value = false
+                filteredList.value = cryptoNewsList.value
+            }
         }
     }
+
 
     Column(
         modifier = Modifier
@@ -108,15 +108,15 @@ fun HomeScreen(navController: NavController) {
         )
 
         Spacer(modifier = Modifier.height(5.dp))
-        ImageSlider(cryptoNewsList)
+        ImageSlider(cryptoNewsList.value)
 
         SearchView() { searchText ->
-            filteredList = performSearch(searchText, cryptoNewsList)
+            filteredList.value = performSearch(searchText, cryptoNewsList.value)
         }
 
         Spacer(modifier = Modifier.height(5.dp))
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
-            CustomProgressDialog(isVisible = progressState)
+            CustomProgressDialog(isVisible = progressState.value)
         }
 
         LazyColumn(
@@ -124,7 +124,7 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxWidth()
                 .padding(horizontal = 25.dp, vertical = 5.dp)
         ) {
-            items(filteredList.size) {
+            items(filteredList.value.size) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -138,7 +138,7 @@ fun HomeScreen(navController: NavController) {
                             .padding(top = 10.dp)
                     ) {
                         GlideImage(
-                            model = filteredList[it].image,
+                            model = filteredList.value[it].image,
                             contentDescription = "crypto-image",
                             modifier = Modifier
                                 .fillMaxSize()
@@ -160,13 +160,13 @@ fun HomeScreen(navController: NavController) {
                     ) {
 
                         Text(
-                            text = filteredList[it].title,
+                            text = filteredList.value[it].title,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
 
                         Text(
-                            text = filteredList[it].content,
+                            text = filteredList.value[it].content,
                             maxLines = 2,
                             fontSize = 14.sp,
                             overflow = TextOverflow.Ellipsis

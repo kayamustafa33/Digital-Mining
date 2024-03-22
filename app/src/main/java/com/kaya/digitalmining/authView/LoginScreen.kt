@@ -18,10 +18,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -49,10 +47,9 @@ import com.kaya.digitalmining.util.getString
 @Composable
 fun LoginScreen(navController : NavController, context: Context) {
 
-    var emailState by remember { mutableStateOf("") }
-    var passwordState by remember { mutableStateOf("") }
-    var showDialog by remember { mutableStateOf(false) }
-
+    val emailState = remember { mutableStateOf("") }
+    val passwordState = remember { mutableStateOf("") }
+    val showDialog = remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
 
@@ -74,8 +71,8 @@ fun LoginScreen(navController : NavController, context: Context) {
         )
 
         OutlinedTextField(
-            value = emailState,
-            onValueChange = { newValue -> emailState = newValue },
+            value = emailState.value,
+            onValueChange = { newValue -> emailState.value = newValue },
             label = { Text(text = getString(id = R.string.email)) },
             singleLine = true,
             modifier = Modifier
@@ -88,8 +85,8 @@ fun LoginScreen(navController : NavController, context: Context) {
         )
 
         OutlinedTextField(
-            value = passwordState,
-            onValueChange = { newValue -> passwordState = newValue },
+            value = passwordState.value,
+            onValueChange = { newValue -> passwordState.value = newValue },
             label = {Text(text = getString(id = R.string.password)) },
             singleLine = true,
             modifier = Modifier
@@ -106,20 +103,20 @@ fun LoginScreen(navController : NavController, context: Context) {
         Button(
             colors = ButtonColors(Color(0XFFF39C12),Color.White, Color(0XFFF39C12), Color(0XFFF39C12)),
             onClick = {
-                if (emailState.isNotEmpty() && passwordState.isNotEmpty()) {
-                    showDialog = true
-                    val user = User(emailState, passwordState)
+                if (emailState.value.isNotEmpty() && passwordState.value.isNotEmpty()) {
+                    showDialog.value = true
+                    val user = User(emailState.value, passwordState.value)
                     val authentication = Auth()
-                    emailState = ""
-                    passwordState = ""
+                    emailState.value = ""
+                    passwordState.value = ""
                     authentication.authUser(user) {
                         if (it) {
-                            showDialog = false
+                            showDialog.value = false
                             Intent(context, MainActivity::class.java).also { intent ->
                                 context.startActivity(intent)
                             }
                         }else {
-                            showDialog = false
+                            showDialog.value = false
                         }
                     }
                 }
@@ -151,7 +148,7 @@ fun LoginScreen(navController : NavController, context: Context) {
             .wrapContentSize(Alignment.Center),
         contentAlignment = Alignment.Center
     ) {
-        if(showDialog){
+        if(showDialog.value){
             CustomProgressDialog(isVisible = true)
         }
     }
