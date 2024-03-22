@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController, startDestination = "homeScreen", Modifier.padding(innerPadding)) {
                     composable("homeScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { HomeScreen(navController = navController) }
                     composable("miningScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { MiningScreen(context = LocalContext.current) }
-                    composable("profileScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { ProfileScreen(context = LocalContext.current,navController = navController)}
+                    composable("profileScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { ProfileScreen(navController = navController)}
 
                 }
 
