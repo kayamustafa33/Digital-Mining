@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.controller.DateController
 import com.kaya.digitalmining.controller.HashController
@@ -61,9 +62,9 @@ import java.util.UUID
 @Composable
 fun MiningScreen(context: Context) {
 
-    val minerViewModel by lazy { MinerViewModel() }
-    val dateController by lazy { DateController(context) }
-    val hashController by lazy { HashController() }
+    val minerViewModel = viewModel<MinerViewModel>()
+    val dateController = DateController(context)
+    val hashController = HashController()
     val firebaseImplementor by lazy { FirebaseImplementor() }
 
     val remain = remember { mutableStateOf(context.getString(R.string.synchronization___)) }
@@ -93,6 +94,10 @@ fun MiningScreen(context: Context) {
     minerViewModel.getMinerData()
     minerViewModel.getTotalSdkNetworkAmount()
 
+    minerViewModel.minerData.observe(localLifecycleOwner) { data ->
+        data?.let { dateController.countDownTimer(it.initDate) }
+    }
+
     LaunchedEffect(Unit) {
 
         dateController.remain.observe(localLifecycleOwner) {
@@ -105,10 +110,6 @@ fun MiningScreen(context: Context) {
 
         dateController.hashVisibility.observe(localLifecycleOwner) {
             hashVisibility.value = it
-        }
-
-        minerViewModel.minerData.observe(localLifecycleOwner) { data ->
-            data?.let { dateController.countDownTimer(it.initDate) }
         }
 
         minerViewModel.totalSDKNetworkAmount.observe(localLifecycleOwner) { total ->
@@ -133,7 +134,7 @@ fun MiningScreen(context: Context) {
             contentAlignment = Alignment.TopCenter
         ) {
             Text(
-                text = if (diffState.longValue > 0) hash.value else "",
+                text = if (diffState.longValue > 0L) hash.value else "",
                 color = Color.Gray,
                 modifier = Modifier
                     .alpha(if (hashVisibility.value) 1f else 0f),
@@ -186,7 +187,7 @@ fun MiningScreen(context: Context) {
                 modifier = Modifier.size(199.dp)
             ) {
                 Text(
-                    text = if(diffState.longValue <= 0L && hashVisibility.value.not()) context.getString(R.string.tap_to_mine) else remain.value,
+                    text = if(diffState.longValue <= 0L) context.getString(R.string.tap_to_mine) else remain.value,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xff58D68D)
