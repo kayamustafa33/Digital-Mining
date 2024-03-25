@@ -33,6 +33,8 @@ import androidx.navigation.navArgument
 import com.kaya.digitalmining.mainView.news.NewsDetail
 import com.kaya.digitalmining.model.New
 import com.kaya.digitalmining.mainView.news.HomeScreen
+import com.kaya.digitalmining.mainView.profile.ProfileScreen
+import com.kaya.digitalmining.mainView.profile.WalletScreen
 import com.kaya.digitalmining.util.BottomNavItem
 
 class MainActivity : ComponentActivity() {
@@ -91,13 +93,14 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController, startDestination = "homeScreen", Modifier.padding(innerPadding)) {
                     composable("homeScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { HomeScreen(navController = navController) }
                     composable("miningScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { MiningScreen(context = LocalContext.current) }
-                    composable("profileScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { ProfileScreen(context = LocalContext.current, navController = navController)}
+                    composable("profileScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { ProfileScreen(context = LocalContext.current, navController = navController) }
                     composable("newsDetailScreen/{new}", arguments = listOf(navArgument("new") {
                         type = NavType.SerializableType(New::class.java)
                     })) {backStackEntry ->
                         val new = backStackEntry.arguments?.getSerializable("new") as New
                         NewsDetail(navController = navController, new)
                     }
+                    composable("profileScreen/walletScreen", exitTransition = {ExitTransition.None}) { WalletScreen() }
                 }
             }
         }

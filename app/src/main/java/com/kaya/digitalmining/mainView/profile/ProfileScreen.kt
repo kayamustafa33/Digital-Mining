@@ -1,4 +1,4 @@
-package com.kaya.digitalmining.mainView
+package com.kaya.digitalmining.mainView.profile
 
 import android.content.Context
 import android.widget.Toast
@@ -37,7 +37,7 @@ import com.kaya.digitalmining.R
 import com.kaya.digitalmining.util.ProfileItems
 
 @Composable
-fun ProfileScreen(context: Context,navController: NavController){
+fun ProfileScreen(context: Context, navController: NavController) {
 
     val profileCardItems = listOf(
         Triple(0xff5DADE2.toInt(), R.drawable.wallet, "Wallet"),
@@ -89,6 +89,7 @@ fun ProfileScreen(context: Context,navController: NavController){
                         Surface (
                             color = MaterialTheme.colorScheme.background,
                             onClick = {
+                                profileDestination(navController, profileCardItems[index].third)
                                 Toast.makeText(context, profileCardItems[index].third,Toast.LENGTH_SHORT).show()
                             }
                         ) {
@@ -100,6 +101,14 @@ fun ProfileScreen(context: Context,navController: NavController){
             }
         }
         }
+    }
+}
+
+private fun profileDestination(navController: NavController, page: String) {
+    when(page) {
+        "Wallet" -> navController.navigate("profileScreen/walletScreen")
+        "Mining History" -> {}
+        "Settings" -> {}
     }
 }
 
