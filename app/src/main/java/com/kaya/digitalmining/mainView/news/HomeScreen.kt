@@ -1,6 +1,10 @@
 package com.kaya.digitalmining.mainView.news
 
+import android.os.Bundle
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavController
+import androidx.navigation.NavOptionsBuilder
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -126,7 +131,11 @@ fun HomeScreen(navController: NavController) {
         ) {
             items(filteredList.value.size) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate("newsDetailScreen/${filteredList.value[it]}")
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
@@ -136,6 +145,9 @@ fun HomeScreen(navController: NavController) {
                             .height(100.dp)
                             .width(100.dp)
                             .padding(top = 10.dp)
+                            .clickable {
+
+                            }
                     ) {
                         GlideImage(
                             model = filteredList.value[it].image,

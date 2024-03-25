@@ -25,9 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.kaya.digitalmining.mainView.news.NewsDetail
+import com.kaya.digitalmining.model.New
 import com.kaya.digitalmining.mainView.news.HomeScreen
 import com.kaya.digitalmining.util.BottomNavItem
 
@@ -88,9 +92,13 @@ class MainActivity : ComponentActivity() {
                     composable("homeScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { HomeScreen(navController = navController) }
                     composable("miningScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { MiningScreen(context = LocalContext.current) }
                     composable("profileScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { ProfileScreen(context = LocalContext.current, navController = navController)}
-
+                    composable("newsDetailScreen/{new}", arguments = listOf(navArgument("new") {
+                        type = NavType.SerializableType(New::class.java)
+                    })) {backStackEntry ->
+                        val new = backStackEntry.arguments?.getSerializable("new") as New
+                        NewsDetail(navController = navController, new)
+                    }
                 }
-
             }
         }
     }
