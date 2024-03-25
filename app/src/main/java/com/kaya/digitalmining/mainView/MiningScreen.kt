@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -190,6 +191,8 @@ fun MiningScreen(context: Context) {
                     text = if(diffState.longValue <= 0L) context.getString(R.string.tap_to_mine) else remain.value,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
                     color = Color(0xff58D68D)
                 )
             }
