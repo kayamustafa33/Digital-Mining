@@ -134,7 +134,11 @@ fun HomeScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate("newsDetailScreen/${filteredList.value[it]}")
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                key = "new",
+                                value = filteredList.value[it]
+                            )
+                            navController.navigate(route = "newsDetailScreen")
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -145,9 +149,6 @@ fun HomeScreen(navController: NavController) {
                             .height(100.dp)
                             .width(100.dp)
                             .padding(top = 10.dp)
-                            .clickable {
-
-                            }
                     ) {
                         GlideImage(
                             model = filteredList.value[it].image,

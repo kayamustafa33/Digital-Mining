@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -94,11 +95,9 @@ class MainActivity : ComponentActivity() {
                     composable("homeScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { HomeScreen(navController = navController) }
                     composable("miningScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { MiningScreen(context = LocalContext.current) }
                     composable("profileScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { ProfileScreen(context = LocalContext.current, navController = navController) }
-                    composable("newsDetailScreen/{new}", arguments = listOf(navArgument("new") {
-                        type = NavType.SerializableType(New::class.java)
-                    })) {backStackEntry ->
-                        val new = backStackEntry.arguments?.getSerializable("new") as New
-                        NewsDetail(navController = navController, new)
+                    composable("newsDetailScreen") {
+                        val new = navController.previousBackStackEntry?.savedStateHandle?.get<New>("new")
+                        NewsDetail(navController = navController, cryptoNews = new)
                     }
                     composable("profileScreen/walletScreen", exitTransition = {ExitTransition.None}) { WalletScreen() }
                 }
