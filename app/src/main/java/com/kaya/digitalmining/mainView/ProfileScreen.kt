@@ -1,4 +1,4 @@
-package com.kaya.digitalmining.mainView.profile
+package com.kaya.digitalmining.mainView
 
 import android.content.Context
 import android.widget.Toast
@@ -107,7 +107,7 @@ fun ProfileScreen(context: Context, navController: NavController) {
 private fun profileDestination(navController: NavController, page: String) {
     when(page) {
         "Wallet" -> navController.navigate("profileScreen/walletScreen")
-        "Mining History" -> {}
+        "Mining History" -> {navController.navigate("profileScreen/oldMinerScreen")}
         "Settings" -> {}
     }
 }

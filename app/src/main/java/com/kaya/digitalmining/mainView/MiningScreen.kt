@@ -164,12 +164,12 @@ fun MiningScreen(context: Context) {
                                 showDialog.value = false
                                 adListenerViewModel.showRewardedAd(context as Activity) {
                                     if(it){
-                                        firebaseImplementor.firebaseAuth?.currentUser?.let {
+                                        firebaseImplementor.firebaseAuth?.currentUser?.let { fbUser ->
                                             val minerId = UUID.randomUUID().toString()
                                             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                                             val currentDate = Date()
                                             val formattedDate = dateFormat.format(currentDate)
-                                            val miner = Miner(minerId, firebaseImplementor.firebaseUser!!.uid, formattedDate.toString(), 10)
+                                            val miner = Miner(minerId, fbUser.uid, formattedDate.toString(), 10)
                                             minerViewModel.setMinerData(miner) {
                                                 minerViewModel.setOldMinerData(miner)
                                             }

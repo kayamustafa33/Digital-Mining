@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavController
-import androidx.navigation.NavOptionsBuilder
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -112,7 +111,7 @@ fun HomeScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(5.dp))
         ImageSlider(cryptoNewsList.value)
 
-        SearchView() { searchText ->
+        SearchView { searchText ->
             filteredList.value = performSearch(searchText, cryptoNewsList.value)
         }
 
