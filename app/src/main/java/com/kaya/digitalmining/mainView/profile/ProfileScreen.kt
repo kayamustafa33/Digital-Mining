@@ -113,7 +113,7 @@ private fun profileDestination(navController: NavController, context: Context, p
     when(page) {
         "Wallet" -> navController.navigate("profileScreen/walletScreen")
         "Mining History" -> {}
-        "Settings" -> {}
+        "Settings" -> navController.navigate("profileScreen/settingsScreen")
         "Logout" -> {
             val auth = Auth()
             auth.logout()
