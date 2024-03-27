@@ -1,6 +1,8 @@
 package com.kaya.digitalmining.mainView.profile
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.R
+import com.kaya.digitalmining.authView.AuthActivity
+import com.kaya.digitalmining.controller.Auth
 import com.kaya.digitalmining.util.ProfileItems
 
 @Composable
@@ -42,7 +46,8 @@ fun ProfileScreen(context: Context, navController: NavController) {
     val profileCardItems = listOf(
         Triple(0xff5DADE2.toInt(), R.drawable.wallet, "Wallet"),
         Triple(0xff82E0AA.toInt(), R.drawable.history, "Mining History"),
-        Triple(0xffF5B041.toInt(), R.drawable.settings, "Settings")
+        Triple(0xffF5B041.toInt(), R.drawable.settings, "Settings"),
+        Triple(0xFF000000.toInt(), R.drawable.baseline_logout_24, "Logout")
     )
 
     Box(
@@ -89,7 +94,7 @@ fun ProfileScreen(context: Context, navController: NavController) {
                         Surface (
                             color = MaterialTheme.colorScheme.background,
                             onClick = {
-                                profileDestination(navController, profileCardItems[index].third)
+                                profileDestination(navController = navController, context = context, page = profileCardItems[index].third)
                                 Toast.makeText(context, profileCardItems[index].third,Toast.LENGTH_SHORT).show()
                             }
                         ) {
@@ -104,13 +109,22 @@ fun ProfileScreen(context: Context, navController: NavController) {
     }
 }
 
-private fun profileDestination(navController: NavController, page: String) {
+private fun profileDestination(navController: NavController, context: Context, page: String) {
     when(page) {
         "Wallet" -> navController.navigate("profileScreen/walletScreen")
         "Mining History" -> {}
         "Settings" -> {}
+        "Logout" -> {
+            val auth = Auth()
+            auth.logout()
+            val activity = context as? Activity
+            activity?.finish()
+            val intent = Intent(context, AuthActivity::class.java)
+            context.startActivity(intent)
+        }
     }
 }
+
 
 @Preview
 @Composable

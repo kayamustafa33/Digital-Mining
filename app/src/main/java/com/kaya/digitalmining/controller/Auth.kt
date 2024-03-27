@@ -48,6 +48,10 @@ class Auth : AuthImplementation {
         }
     }
 
+    override fun logout() {
+        initFirebase.firebaseAuth!!.signOut()
+    }
+
     private fun registerUserToRealTimeDB(user: User) {
         val firebaseUser = initFirebase.firebaseAuth?.currentUser
         if (firebaseUser != null) {
