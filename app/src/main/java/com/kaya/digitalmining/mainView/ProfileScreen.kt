@@ -1,7 +1,6 @@
 package com.kaya.digitalmining.mainView
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +41,7 @@ fun ProfileScreen(context: Context, navController: NavController) {
     val profileCardItems = listOf(
         Triple(0xff5DADE2.toInt(), R.drawable.wallet, "Wallet"),
         Triple(0xff82E0AA.toInt(), R.drawable.history, "Mining History"),
+        Triple(0xffF5B041.toInt(), R.drawable.roadmap_logo, "Roadmap"),
         Triple(0xffF5B041.toInt(), R.drawable.settings, "Settings")
     )
 
@@ -90,7 +90,6 @@ fun ProfileScreen(context: Context, navController: NavController) {
                             color = MaterialTheme.colorScheme.background,
                             onClick = {
                                 profileDestination(navController, profileCardItems[index].third)
-                                Toast.makeText(context, profileCardItems[index].third,Toast.LENGTH_SHORT).show()
                             }
                         ) {
                             ProfileItems(cardColors = cardColors, boxIcon = boxIcon, rowText = rowText)
@@ -108,6 +107,7 @@ private fun profileDestination(navController: NavController, page: String) {
     when(page) {
         "Wallet" -> navController.navigate("profileScreen/walletScreen")
         "Mining History" -> {navController.navigate("profileScreen/oldMinerScreen")}
+        "Roadmap" -> {navController.navigate("profileScreen/roadmapScreen")}
         "Settings" -> {}
     }
 }

@@ -32,6 +32,7 @@ import com.kaya.digitalmining.mainView.news.NewsDetail
 import com.kaya.digitalmining.model.New
 import com.kaya.digitalmining.mainView.news.HomeScreen
 import com.kaya.digitalmining.mainView.profile.OldMinerScreen
+import com.kaya.digitalmining.mainView.profile.RoadmapScreen
 import com.kaya.digitalmining.mainView.profile.WalletScreen
 import com.kaya.digitalmining.util.BottomNavItem
 
@@ -98,6 +99,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("profileScreen/walletScreen", exitTransition = {ExitTransition.None}) { WalletScreen() }
                     composable("profileScreen/oldMinerScreen", exitTransition = {ExitTransition.None}){ OldMinerScreen() }
+                    composable("profileScreen/roadmapScreen", exitTransition = { ExitTransition.None}) { RoadmapScreen() }
                 }
             }
         }
