@@ -9,4 +9,8 @@
     <string name="dont_have_account">"Don't have an account yet? Sign up."</string>
     <string name="synchronization...">Synchronization...</string>
     <string name="already_have_an_account">Already have an account? Sign In</string>
+
+    <!-- Settings Screen Resources -->
+    <string name="settings">Settings</string>
+
 </resources>

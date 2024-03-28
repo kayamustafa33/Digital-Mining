@@ -9,4 +9,8 @@
     <string name="dont_have_account">Henüz bir hesabın yok mu? Kayıt Ol.</string>
     <string name="synchronization...">Senkronizasyon...</string>
     <string name="already_have_an_account">Zaten bir hesabın var mı? Giriş Yap</string>
+
+    <!-- Settings Screen Resources -->
+    <string name="settings">Ayalar</string>
+
 </resources>
