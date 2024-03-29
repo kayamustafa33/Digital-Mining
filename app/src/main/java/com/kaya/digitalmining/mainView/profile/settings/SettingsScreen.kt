@@ -1,4 +1,4 @@
-package com.kaya.digitalmining.mainView.profile
+package com.kaya.digitalmining.mainView.profile.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,23 +11,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.util.FeedbackItems
 import com.kaya.digitalmining.util.SettingsItems
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF313131))
+            .background(Color(0xFF181A20))
     ) {
         Text(
             text = stringResource(id = R.string.settings),
@@ -43,11 +44,11 @@ fun SettingsScreen() {
         Divider(color = Color.DarkGray)
 
         SettingsSection(title = "General") {
-            SettingsItems()
+            SettingsItems(navController = navController)
         }
 
         SettingsSection(title = "Feedback") {
-            FeedbackItems()
+            FeedbackItems(navController = navController)
         }
     }
 }
@@ -72,7 +73,7 @@ private fun SettingsSection(title: String, content: @Composable () -> Unit) {
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun PreviewSettingsScreen() {
-    SettingsScreen()
+    SettingsScreen(navController = rememberNavController())
 }
 
 val largePadding = 35.dp

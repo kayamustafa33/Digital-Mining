@@ -19,24 +19,22 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.kaya.digitalmining.mainView.news.NewsDetail
 import com.kaya.digitalmining.model.New
 import com.kaya.digitalmining.mainView.news.HomeScreen
 import com.kaya.digitalmining.mainView.profile.ProfileScreen
-import com.kaya.digitalmining.mainView.profile.SettingsScreen
+import com.kaya.digitalmining.mainView.profile.settings.SettingsScreen
 import com.kaya.digitalmining.mainView.profile.WalletScreen
+import com.kaya.digitalmining.mainView.profile.settings.ResetPasswordScreen
 import com.kaya.digitalmining.util.BottomNavItem
 
 class MainActivity : ComponentActivity() {
@@ -101,7 +99,8 @@ class MainActivity : ComponentActivity() {
                         NewsDetail(navController = navController, cryptoNews = new)
                     }
                     composable("profileScreen/walletScreen", exitTransition = {ExitTransition.None}) { WalletScreen() }
-                    composable("profileScreen/settingsScreen", exitTransition = {ExitTransition.None}) { SettingsScreen() }
+                    composable("profileScreen/settingsScreen", exitTransition = {ExitTransition.None}) { SettingsScreen(navController = navController) }
+                    composable("settingsScreen/resetPasswordScreen", exitTransition = {ExitTransition.None}) { ResetPasswordScreen() }
                 }
             }
         }
