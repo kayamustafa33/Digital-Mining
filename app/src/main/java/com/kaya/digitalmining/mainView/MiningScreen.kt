@@ -24,18 +24,14 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -45,16 +41,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kaya.digitalmining.R
-import com.kaya.digitalmining.controller.DateController
-import com.kaya.digitalmining.controller.HashController
 import com.kaya.digitalmining.model.Miner
 import com.kaya.digitalmining.service.AdMobRewardedAd
 import com.kaya.digitalmining.service.FirebaseImplementor
 import com.kaya.digitalmining.util.BottomSheetScreen
 import com.kaya.digitalmining.util.ClickableText
 import com.kaya.digitalmining.util.CustomProgressDialog
+import com.kaya.digitalmining.viewModel.CountDownTimerViewModel
 import com.kaya.digitalmining.viewModel.MinerViewModel
-import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -64,26 +58,13 @@ import java.util.UUID
 fun MiningScreen(context: Context) {
 
     val minerViewModel = viewModel<MinerViewModel>()
-    val dateController = DateController(context)
-    val hashController = HashController()
     val firebaseImplementor by lazy { FirebaseImplementor() }
+    val countDownTimerViewModel by lazy { CountDownTimerViewModel(context) }
 
-    val remain = remember { mutableStateOf(context.getString(R.string.synchronization___)) }
-    val diffState = remember { mutableLongStateOf(0L) }
-    val hashVisibility = remember { mutableStateOf(true) }
-    val hash = remember { mutableStateOf("") }
-    val sdkCoin = remember { mutableIntStateOf(0) }
-    val localLifecycleOwner = LocalLifecycleOwner.current
     val showDialog = remember { mutableStateOf(false) }
     val showSheet = remember { mutableStateOf(false) }
     val clipboardManager = LocalClipboardManager.current
     val sdkNetworkWalletAddress = "0x1dD0c77E499e6e98359cAE3a7F509def94b14cC7"
-
-    LaunchedEffect(Unit) {
-        remain.value = context.getString(R.string.synchronization___)
-        delay(1000)
-    }
-
     val adListenerViewModel = AdMobRewardedAd()
 
     if (showSheet.value) {
@@ -94,38 +75,14 @@ fun MiningScreen(context: Context) {
 
     minerViewModel.getMinerData()
     minerViewModel.getTotalSdkNetworkAmount()
-
-    minerViewModel.minerData.observe(localLifecycleOwner) { data ->
-        data?.let { dateController.countDownTimer(it.initDate) }
-    }
-
-    LaunchedEffect(Unit) {
-
-        dateController.remain.observe(localLifecycleOwner) {
-            remain.value = it
-        }
-
-        dateController.diffState.observe(localLifecycleOwner) {
-            diffState.longValue = it
-        }
-
-        dateController.hashVisibility.observe(localLifecycleOwner) {
-            hashVisibility.value = it
-        }
-
-        minerViewModel.totalSDKNetworkAmount.observe(localLifecycleOwner) { total ->
-            sdkCoin.intValue = total
-        }
-    }
-
-    hashController.hashCoinText(diffState.longValue) {
-        hash.value = it
-    }
+    countDownTimerViewModel.startCountDownTimer(context,minerViewModel.minerData.value?.initDate)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xff154360))
+            .drawBehind {
+                drawRect(Color(0xff154360))
+            }
             .padding(16.dp),
     ) {
         Box(
@@ -135,10 +92,8 @@ fun MiningScreen(context: Context) {
             contentAlignment = Alignment.TopCenter
         ) {
             Text(
-                text = if (diffState.longValue > 0L) hash.value else "",
+                text = "",
                 color = Color.Gray,
-                modifier = Modifier
-                    .alpha(if (hashVisibility.value) 1f else 0f),
             )
         }
 
@@ -157,7 +112,7 @@ fun MiningScreen(context: Context) {
 
             Button(
                 onClick = {
-                    if (diffState.longValue <= 0) {
+                    if (countDownTimerViewModel.diffTime.longValue < 0L) {
                         showDialog.value = true
                         adListenerViewModel.loadRewardedAd(context) { isLoaded ->
                             if(isLoaded){
@@ -188,7 +143,7 @@ fun MiningScreen(context: Context) {
                 modifier = Modifier.size(199.dp)
             ) {
                 Text(
-                    text = if(diffState.longValue <= 0L) context.getString(R.string.tap_to_mine) else remain.value,
+                    text = countDownTimerViewModel.timerText.value,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth(),
@@ -199,7 +154,7 @@ fun MiningScreen(context: Context) {
         }
 
         Text(
-            text = sdkCoin.intValue.toString() + " " + "SDKN",
+            text = minerViewModel.totalSDKNetworkAmount.intValue.toString() + " " + "SDKN",
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(10.dp),
