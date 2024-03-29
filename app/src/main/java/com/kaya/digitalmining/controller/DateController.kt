@@ -14,7 +14,7 @@ class DateController(private val context: Context) {
     private var countDownTimer: CountDownTimer? = null
     val remain = MutableLiveData<String>()
     val hashVisibility = MutableLiveData<Boolean>()
-    var diffState = MutableLiveData<Long>()
+    private var diffState = MutableLiveData<Long>()
 
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     private val viewModelJob = Job()

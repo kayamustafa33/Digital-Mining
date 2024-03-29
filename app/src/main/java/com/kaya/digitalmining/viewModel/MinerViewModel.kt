@@ -1,5 +1,6 @@
 package com.kaya.digitalmining.viewModel
 
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.database.DataSnapshot
@@ -15,7 +16,7 @@ class MinerViewModel : ViewModel(), MinerImplementation {
     val minerData = MutableLiveData<Miner?>()
     val oldMinerData = MutableLiveData<ArrayList<OldMiner>?>(ArrayList())
     private val firebaseImplementor = FirebaseImplementor()
-    val totalSDKNetworkAmount = MutableLiveData<Int>()
+    val totalSDKNetworkAmount = mutableIntStateOf(0)
 
     override fun getMinerData() {
         with(firebaseImplementor){
@@ -128,14 +129,14 @@ class MinerViewModel : ViewModel(), MinerImplementation {
                                 )
                                 tempTotal += oldMiner.sdkCoinAmount
                             }
-                            totalSDKNetworkAmount.value = tempTotal
+                            totalSDKNetworkAmount.intValue = tempTotal
                         } else {
-                            totalSDKNetworkAmount.value = 0
+                            totalSDKNetworkAmount.intValue = 0
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        totalSDKNetworkAmount.value = 0
+                        totalSDKNetworkAmount.intValue = 0
                     }
                 }
                 databaseReference?.child(firebaseUser!!.uid)?.addValueEventListener(totalListener)
