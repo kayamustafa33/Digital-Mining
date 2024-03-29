@@ -47,9 +47,8 @@ fun ProfileScreen(context: Context, navController: NavController) {
         Triple(0xff5DADE2.toInt(), R.drawable.wallet, "Wallet"),
         Triple(0xff82E0AA.toInt(), R.drawable.history, "Mining History"),
         Triple(0xffF5B041.toInt(), R.drawable.settings, "Settings"),
-        Triple(0xFF000000.toInt(), R.drawable.baseline_logout_24, "Logout"),
         Triple(0xffF5B041.toInt(), R.drawable.roadmap_logo, "Roadmap"),
-        Triple(0xffF5B041.toInt(), R.drawable.settings, "Settings")
+        Triple(0xFF000000.toInt(), R.drawable.baseline_logout_24, "Logout")
     )
 
     Box(

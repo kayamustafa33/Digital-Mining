@@ -33,10 +33,9 @@ import com.kaya.digitalmining.model.New
 import com.kaya.digitalmining.mainView.news.HomeScreen
 import com.kaya.digitalmining.mainView.profile.OldMinerScreen
 import com.kaya.digitalmining.mainView.profile.RoadmapScreen
-import com.kaya.digitalmining.mainView.profile.ProfileScreen
-import com.kaya.digitalmining.mainView.profile.settings.SettingsScreen
 import com.kaya.digitalmining.mainView.profile.WalletScreen
 import com.kaya.digitalmining.mainView.profile.settings.ResetPasswordScreen
+import com.kaya.digitalmining.mainView.profile.settings.SettingsScreen
 import com.kaya.digitalmining.util.BottomNavItem
 
 class MainActivity : ComponentActivity() {
