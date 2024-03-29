@@ -13,4 +13,5 @@
     <!-- Settings Screen Resources -->
     <string name="settings">Settings</string>
 
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
 </resources>

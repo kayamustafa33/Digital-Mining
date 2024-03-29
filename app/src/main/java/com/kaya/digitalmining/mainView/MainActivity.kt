@@ -31,6 +31,8 @@ import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.mainView.news.NewsDetail
 import com.kaya.digitalmining.model.New
 import com.kaya.digitalmining.mainView.news.HomeScreen
+import com.kaya.digitalmining.mainView.profile.OldMinerScreen
+import com.kaya.digitalmining.mainView.profile.RoadmapScreen
 import com.kaya.digitalmining.mainView.profile.ProfileScreen
 import com.kaya.digitalmining.mainView.profile.settings.SettingsScreen
 import com.kaya.digitalmining.mainView.profile.WalletScreen
@@ -101,6 +103,8 @@ class MainActivity : ComponentActivity() {
                     composable("profileScreen/walletScreen", exitTransition = {ExitTransition.None}) { WalletScreen() }
                     composable("profileScreen/settingsScreen", exitTransition = {ExitTransition.None}) { SettingsScreen(navController = navController) }
                     composable("settingsScreen/resetPasswordScreen", exitTransition = {ExitTransition.None}) { ResetPasswordScreen() }
+                    composable("profileScreen/oldMinerScreen", exitTransition = {ExitTransition.None}){ OldMinerScreen() }
+                    composable("profileScreen/roadmapScreen", exitTransition = { ExitTransition.None}) { RoadmapScreen() }
                 }
             }
         }

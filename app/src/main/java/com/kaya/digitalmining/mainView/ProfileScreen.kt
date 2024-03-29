@@ -1,4 +1,4 @@
-package com.kaya.digitalmining.mainView.profile
+package com.kaya.digitalmining.mainView
 
 import android.app.Activity
 import android.content.Context
@@ -47,7 +47,9 @@ fun ProfileScreen(context: Context, navController: NavController) {
         Triple(0xff5DADE2.toInt(), R.drawable.wallet, "Wallet"),
         Triple(0xff82E0AA.toInt(), R.drawable.history, "Mining History"),
         Triple(0xffF5B041.toInt(), R.drawable.settings, "Settings"),
-        Triple(0xFF000000.toInt(), R.drawable.baseline_logout_24, "Logout")
+        Triple(0xFF000000.toInt(), R.drawable.baseline_logout_24, "Logout"),
+        Triple(0xffF5B041.toInt(), R.drawable.roadmap_logo, "Roadmap"),
+        Triple(0xffF5B041.toInt(), R.drawable.settings, "Settings")
     )
 
     Box(
@@ -95,7 +97,6 @@ fun ProfileScreen(context: Context, navController: NavController) {
                             color = MaterialTheme.colorScheme.background,
                             onClick = {
                                 profileDestination(navController = navController, context = context, page = profileCardItems[index].third)
-                                Toast.makeText(context, profileCardItems[index].third,Toast.LENGTH_SHORT).show()
                             }
                         ) {
                             ProfileItems(cardColors = cardColors, boxIcon = boxIcon, rowText = rowText)
@@ -112,6 +113,8 @@ fun ProfileScreen(context: Context, navController: NavController) {
 private fun profileDestination(navController: NavController, context: Context, page: String) {
     when(page) {
         "Wallet" -> navController.navigate("profileScreen/walletScreen")
+        "Mining History" -> {navController.navigate("profileScreen/oldMinerScreen")}
+        "Roadmap" -> {navController.navigate("profileScreen/roadmapScreen")}
         "Mining History" -> {}
         "Settings" -> navController.navigate("profileScreen/settingsScreen")
         "Logout" -> {

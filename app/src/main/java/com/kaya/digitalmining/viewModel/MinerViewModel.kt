@@ -13,7 +13,7 @@ import com.kaya.digitalmining.service.FirebaseImplementor
 class MinerViewModel : ViewModel(), MinerImplementation {
 
     val minerData = MutableLiveData<Miner?>()
-    val oldMinerData = MutableLiveData<List<OldMiner>?>()
+    val oldMinerData = MutableLiveData<ArrayList<OldMiner>?>(ArrayList())
     private val firebaseImplementor = FirebaseImplementor()
     val totalSDKNetworkAmount = MutableLiveData<Int>()
 
@@ -78,25 +78,25 @@ class MinerViewModel : ViewModel(), MinerImplementation {
     }
 
     override fun getOldMinerData() {
+        val tempList = ArrayList<OldMiner>()
         with(firebaseImplementor){
-            firebaseUser?.let {
+            firebaseUser?.let { fbUser->
                 createOrOpenFirebaseDB("OldMiner")
-                val minerListener = object : ValueEventListener{
+                val minerListener = object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if(snapshot.exists()){
-                            val tempList = mutableListOf<OldMiner>()
                             for(dataSnapshot in snapshot.children){
-                                val miner = OldMiner(
+                                val oldMiner = OldMiner(
                                     dataSnapshot.child("minerID").value.toString(),
                                     dataSnapshot.child("userID").value.toString(),
                                     dataSnapshot.child("initDate").value.toString(),
                                     dataSnapshot.child("sdkCoinAmount").value.toString().toInt()
                                 )
-                                tempList.add(miner)
+                                if(fbUser.uid == oldMiner.userID) { tempList.add(oldMiner) }
+                                println(tempList)
                             }
                             oldMinerData.value = tempList
-                            tempList.clear()
-                        }else {
+                        } else {
                             oldMinerData.value = null
                         }
                     }
@@ -104,13 +104,12 @@ class MinerViewModel : ViewModel(), MinerImplementation {
                     override fun onCancelled(error: DatabaseError) {
                         oldMinerData.value = null
                     }
-
                 }
-                databaseReference?.child(firebaseUser!!.uid)!!.addListenerForSingleValueEvent(minerListener)
+                databaseReference?.child(fbUser.uid)!!.addValueEventListener(minerListener)
             }
-
         }
     }
+
 
     override fun getTotalSdkNetworkAmount() {
         with(firebaseImplementor){

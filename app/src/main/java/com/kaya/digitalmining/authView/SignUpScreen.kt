@@ -129,12 +129,11 @@ fun SignUpScreen(navController : NavController, context: Context){
 
         Button(
             onClick = {
-                      if(password == confirmPassword
-                          && TextUtils.isEmpty(email.value).not()
-                          && TextUtils.isEmpty(password.value).not()
-                          && TextUtils.isEmpty(confirmPassword.value).not()){
+                      if(email.value.isNotEmpty()
+                          && password.value.isNotEmpty()
+                          && confirmPassword.value.isNotEmpty()){
 
-                          if(password == confirmPassword){
+                          if(password.value == confirmPassword.value){
                               if(password.value.length >= 6){
                                   showDialog.value = true
 
