@@ -37,6 +37,7 @@ import com.kaya.digitalmining.mainView.profile.WalletScreen
 import com.kaya.digitalmining.mainView.profile.settings.ResetPasswordScreen
 import com.kaya.digitalmining.mainView.profile.settings.SettingsScreen
 import com.kaya.digitalmining.util.BottomNavItem
+import com.kaya.digitalmining.util.SuccessScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,9 +102,11 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("profileScreen/walletScreen", exitTransition = {ExitTransition.None}) { WalletScreen() }
                     composable("profileScreen/settingsScreen", exitTransition = {ExitTransition.None}) { SettingsScreen(navController = navController) }
-                    composable("settingsScreen/resetPasswordScreen", exitTransition = {ExitTransition.None}) { ResetPasswordScreen() }
+                    composable("settingsScreen/resetPasswordScreen", exitTransition = {ExitTransition.None}) { ResetPasswordScreen(navController = navController) }
                     composable("profileScreen/oldMinerScreen", exitTransition = {ExitTransition.None}){ OldMinerScreen() }
                     composable("profileScreen/roadmapScreen", exitTransition = { ExitTransition.None}) { RoadmapScreen() }
+                    composable("resetPasswordScreen/successScreen", exitTransition = { ExitTransition.None}) { SuccessScreen(navController = navController) }
+                    composable("successScreen/profileScreen", exitTransition = { ExitTransition.None}) { ProfileScreen(context = LocalContext.current, navController = navController) }
                 }
             }
         }

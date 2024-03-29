@@ -30,11 +30,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.controller.Auth
 
 @Composable
-fun ResetPasswordScreen() {
+fun ResetPasswordScreen(navController: NavController) {
 
     val authentication = Auth()
     val confirmEmail = remember { mutableStateOf("") }
@@ -80,7 +82,7 @@ fun ResetPasswordScreen() {
             modifier = Modifier.padding(start = 15.dp, top = 5.dp, end = 15.dp),
             fontSize = 16.sp,
             color = Color.Gray,
-            fontWeight = FontWeight.W500
+            fontWeight = FontWeight.W400
         )
 
         OutlinedTextField(
@@ -111,7 +113,10 @@ fun ResetPasswordScreen() {
             onClick = {
                 if (confirmEmail.value.isNotEmpty()) {
                     authentication.resetPassword(confirmEmail.value) { result ->
-                        if (result) Log.d("res-password", "success")
+                        if (result) {
+                            navController.popBackStack()
+                            navController.navigate("resetPasswordScreen/successScreen")
+                        }
                         else Log.d("res-password", "error")
                     }
                 }
@@ -133,5 +138,5 @@ fun ResetPasswordScreen() {
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun PreviewResetPassword() {
-    ResetPasswordScreen()
+    ResetPasswordScreen(navController = rememberNavController())
 }
