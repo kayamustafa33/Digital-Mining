@@ -8,6 +8,6 @@ interface AuthImplementation {
     fun authUser(user: User, callback: (Boolean) -> Unit)
     fun isLogin() : Boolean
     fun logout()
-    fun resetPassword()
+    fun resetPassword(confirmEmail: String, result: (Boolean) -> Unit)
 
 }

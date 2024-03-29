@@ -1,5 +1,7 @@
 package com.kaya.digitalmining.mainView.profile.settings
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,10 +31,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kaya.digitalmining.R
+import com.kaya.digitalmining.controller.Auth
 
 @Composable
 fun ResetPasswordScreen() {
 
+    val authentication = Auth()
     val confirmEmail = remember { mutableStateOf("") }
     val textFieldColors = TextFieldDefaults.outlinedTextFieldColors(
         focusedBorderColor = Color(0xFFF0B90B),
@@ -103,7 +108,14 @@ fun ResetPasswordScreen() {
         )
 
         Button(
-            onClick = { },
+            onClick = {
+                if (confirmEmail.value.isNotEmpty()) {
+                    authentication.resetPassword(confirmEmail.value) { result ->
+                        if (result) Log.d("res-password", "success")
+                        else Log.d("res-password", "error")
+                    }
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp, vertical = 10.dp),
