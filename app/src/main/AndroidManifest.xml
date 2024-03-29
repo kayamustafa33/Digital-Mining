@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -15,25 +15,31 @@
         android:theme="@style/Theme.DigitalMining"
         tools:targetApi="31">
         <activity
-            android:name=".authView.AuthActivity"
+            android:name=".splashView.SplashScreenActivity"
             android:exported="true"
+            android:label="@string/title_activity_splash_screen"
             android:theme="@style/Theme.DigitalMining">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".mainView.MainActivity"
+            android:name=".authView.AuthActivity"
             android:exported="true"
             android:theme="@style/Theme.DigitalMining">
+
         </activity>
+        <activity
+            android:name=".mainView.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DigitalMining"/>
 
         <!-- Admob Init -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2292596646368029~5832805167"/>
-
+            android:value="ca-app-pub-2292596646368029~5832805167" />
     </application>
 
 </manifest>
