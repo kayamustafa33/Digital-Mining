@@ -37,6 +37,7 @@ import com.kaya.digitalmining.mainView.profile.WalletScreen
 import com.kaya.digitalmining.util.BottomNavItem
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

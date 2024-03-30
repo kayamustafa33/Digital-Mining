@@ -24,6 +24,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -47,6 +49,7 @@ import com.kaya.digitalmining.service.FirebaseImplementor
 import com.kaya.digitalmining.util.BottomSheetScreen
 import com.kaya.digitalmining.util.ClickableText
 import com.kaya.digitalmining.util.CustomProgressDialog
+import com.kaya.digitalmining.util.getStringResource
 import com.kaya.digitalmining.viewModel.CountDownTimerViewModel
 import com.kaya.digitalmining.viewModel.MinerViewModel
 import java.text.SimpleDateFormat
@@ -59,10 +62,11 @@ fun MiningScreen(context: Context) {
 
     val minerViewModel = viewModel<MinerViewModel>()
     val firebaseImplementor by lazy { FirebaseImplementor() }
-    val countDownTimerViewModel by lazy { CountDownTimerViewModel(context) }
+    val countDownTimerViewModel = viewModel<CountDownTimerViewModel>()
 
     val showDialog = remember { mutableStateOf(false) }
     val showSheet = remember { mutableStateOf(false) }
+
     val clipboardManager = LocalClipboardManager.current
     val sdkNetworkWalletAddress = "0x1dD0c77E499e6e98359cAE3a7F509def94b14cC7"
     val adListenerViewModel = AdMobRewardedAd()
@@ -75,7 +79,14 @@ fun MiningScreen(context: Context) {
 
     minerViewModel.getMinerData()
     minerViewModel.getTotalSdkNetworkAmount()
-    countDownTimerViewModel.startCountDownTimer(context,minerViewModel.minerData.value?.initDate)
+
+    minerViewModel.minerData.observe(LocalLifecycleOwner.current){
+        it?.let { miner ->
+            countDownTimerViewModel.startCountDownTimer(context, miner.initDate)
+        } ?: run {
+            countDownTimerViewModel.timerText.value = "Tap to mine"
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -85,17 +96,6 @@ fun MiningScreen(context: Context) {
             }
             .padding(16.dp),
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            Text(
-                text = "",
-                color = Color.Gray,
-            )
-        }
 
         Box(
             modifier = Modifier
@@ -112,7 +112,7 @@ fun MiningScreen(context: Context) {
 
             Button(
                 onClick = {
-                    if (countDownTimerViewModel.diffTime.longValue < 0L) {
+                    if (countDownTimerViewModel.diffTime.longValue <= 0L) {
                         showDialog.value = true
                         adListenerViewModel.loadRewardedAd(context) { isLoaded ->
                             if(isLoaded){
@@ -143,7 +143,7 @@ fun MiningScreen(context: Context) {
                 modifier = Modifier.size(199.dp)
             ) {
                 Text(
-                    text = countDownTimerViewModel.timerText.value,
+                    text = if(countDownTimerViewModel.diffTime.longValue == 0L) getStringResource(context,R.string.synchronization___) else countDownTimerViewModel.timerText.value,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth(),
