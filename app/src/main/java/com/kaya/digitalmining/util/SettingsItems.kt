@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.mainView.profile.settings.ResetPasswordScreen
+import com.kaya.digitalmining.navigation.Screen
 
 @Composable
 fun SettingsItems(navController: NavController) {
@@ -87,7 +88,7 @@ fun SettingsText(item: String, drawableResource: Int, navController: NavControll
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp, vertical = 0.dp)
                 .clickable {
-                    navController.navigate("settingsScreen/$route")
+                    navController.navigate("${Screen.SettingsScreen.route}/$route")
                 },
             verticalAlignment = Alignment.CenterVertically,
         ) {

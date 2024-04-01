@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.kaya.digitalmining.navigation.Screen
 
 @Composable
 fun SuccessScreen(navController: NavController) {
@@ -67,7 +68,7 @@ fun SuccessScreen(navController: NavController) {
         Button(
             onClick = {
                 navController.popBackStack()
-                navController.navigate("successScreen/profileScreen")
+                navController.navigate("${Screen.SuccessScreen.route}/${Screen.ProfileScreen.route}")
             },
             modifier = Modifier
                 .fillMaxWidth()

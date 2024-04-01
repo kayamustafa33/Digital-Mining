@@ -56,6 +56,7 @@ import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.model.New
+import com.kaya.digitalmining.navigation.Screen
 import com.kaya.digitalmining.util.CustomProgressDialog
 import com.kaya.digitalmining.viewModel.NewsViewModel
 import kotlinx.coroutines.delay
@@ -134,7 +135,7 @@ fun HomeScreen(navController: NavController) {
                                 key = "new",
                                 value = filteredList.value[it]
                             )
-                            navController.navigate(route = "newsDetailScreen")
+                            navController.navigate(route = Screen.NewsDetailScreen.route)
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {

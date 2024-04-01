@@ -1,7 +1,6 @@
 package com.kaya.digitalmining.mainView.profile.settings
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
@@ -23,7 +21,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +31,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.controller.Auth
+import com.kaya.digitalmining.navigation.Screen
 
 @Composable
 fun ResetPasswordScreen(navController: NavController) {
@@ -115,7 +113,7 @@ fun ResetPasswordScreen(navController: NavController) {
                     authentication.resetPassword(confirmEmail.value) { result ->
                         if (result) {
                             navController.popBackStack()
-                            navController.navigate("resetPasswordScreen/successScreen")
+                            navController.navigate("${Screen.ResetPasswordScreen.route}/${Screen.SuccessScreen.route}")
                         }
                         else Log.d("res-password", "error")
                     }
