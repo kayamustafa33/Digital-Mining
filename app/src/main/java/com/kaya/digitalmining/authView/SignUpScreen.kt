@@ -1,5 +1,6 @@
 package com.kaya.digitalmining.authView
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
@@ -148,8 +149,10 @@ fun SignUpScreen(navController : NavController, context: Context){
                                   auth.registerUser(user){
                                       if(it){
                                           showDialog.value = false
-                                          Intent(context,MainActivity::class.java).also { intent ->
-                                              context.startActivity(intent)
+                                          val activity = context as? Activity
+                                          Intent(activity,MainActivity::class.java).also { intent ->
+                                              activity?.startActivity(intent)
+                                              activity?.finish()
                                           }
                                       }else {
                                           showDialog.value = false

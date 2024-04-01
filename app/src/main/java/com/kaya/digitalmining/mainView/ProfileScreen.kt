@@ -115,7 +115,7 @@ private fun profileDestination(navController: NavController, context: Context, p
         "Wallet" -> navController.navigate("${Screen.ProfileScreen.route}/${Screen.WalletScreen.route}")
         "Mining History" -> {navController.navigate("${Screen.ProfileScreen.route}/${Screen.OldMinerScreen.route}")}
         "Roadmap" -> {navController.navigate("${Screen.ProfileScreen.route}/${Screen.RoadmapScreen.route}")}
-        "Mining History" -> {}
+        "Mining History" -> { }
         "Settings" -> navController.navigate("${Screen.ProfileScreen.route}/${Screen.SettingsScreen.route}")
         "Logout" -> {
             val auth = Auth()

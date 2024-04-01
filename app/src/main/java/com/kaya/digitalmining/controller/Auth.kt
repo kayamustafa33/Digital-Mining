@@ -1,5 +1,6 @@
 package com.kaya.digitalmining.controller
 
+import android.util.Log
 import com.kaya.digitalmining.contracts.AuthImplementation
 import com.kaya.digitalmining.model.User
 import com.kaya.digitalmining.service.FirebaseImplementor
@@ -49,6 +50,16 @@ class Auth : AuthImplementation {
 
     override fun logout() {
         initFirebase.firebaseAuth!!.signOut()
+    }
+
+    override fun deleteAccount(result: (Boolean) -> Unit) {
+        val user = initFirebase.firebaseAuth!!.currentUser!!
+        user.delete().addOnCompleteListener { task ->
+            if (task.isSuccessful) result(true)
+            else result(false)
+        }.addOnFailureListener {
+            result(false)
+        }
     }
 
     override fun resetPassword(confirmEmail: String, result: (Boolean) -> Unit): Unit = with(initFirebase) {
