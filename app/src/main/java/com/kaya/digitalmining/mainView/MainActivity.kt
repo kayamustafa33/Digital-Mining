@@ -41,6 +41,7 @@ import com.kaya.digitalmining.util.BottomNavItem
 import com.kaya.digitalmining.util.SuccessScreen
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -1,5 +1,6 @@
 package com.kaya.digitalmining.util
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,4 +26,8 @@ object TimeFormatExt {
         TimeUnit.MILLISECONDS.toMinutes(this) % 60,
         TimeUnit.MILLISECONDS.toSeconds(this) % 60
     )
+}
+
+fun getStringResource(context: Context, stringResId: Int): String {
+    return context.resources.getString(stringResId)
 }

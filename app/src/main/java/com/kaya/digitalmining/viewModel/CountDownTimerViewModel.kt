@@ -1,69 +1,75 @@
 package com.kaya.digitalmining.viewModel
 
 import android.content.Context
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.util.TimeFormatExt.timeFormat
+import com.kaya.digitalmining.util.getStringResource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Executors
 
-class CountDownTimerViewModel(context: Context) : ViewModel() {
+class CountDownTimerViewModel : ViewModel(){
 
-    private var timerHandler: Handler = Handler(Looper.getMainLooper())
-    private var timerRunnable: Runnable? = null
+    private var countDownTimer: CountDownTimer? = null
 
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val diffTime = mutableLongStateOf(0L)
-    var timerText = mutableStateOf(getStringResource(context,R.string.synchronization___))
+    var timerText = mutableStateOf("")
+    private val viewModelJob = Job()
+    private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    fun startCountDownTimer(context: Context, initDate: String?) {
-        initDate?.let {
-            val targetCalendar = Calendar.getInstance().apply {
-                time = formatter.parse(initDate)!!
-                add(Calendar.HOUR_OF_DAY, 4)
-            }
+    fun startCountDownTimer(context: Context, initDate: String) {
 
-            val targetDate: Long = targetCalendar.timeInMillis
-            val currentTime = System.currentTimeMillis()
-            val diff = targetDate - currentTime
-            diffTime.longValue = diff
+        val targetCalendar = Calendar.getInstance().apply {
+            time = formatter.parse(initDate)!!
+            add(Calendar.HOUR_OF_DAY, 4)
+        }
 
-            if (diff > 0) {
-                startTimer(context)
-            } else {
-                timerText.value = getStringResource(context,R.string.tap_to_mine)
-            }
+        val targetDate: Long = targetCalendar.timeInMillis
+        val currentTime = System.currentTimeMillis()
+        val diff = targetDate - currentTime
+        diffTime.longValue = diff
+
+        if (diff > 0) {
+            startTimer(context)
+        } else {
+            timerText.value = getStringResource(context, R.string.tap_to_mine)
+            countDownTimer?.cancel()
         }
     }
 
     private fun startTimer(context: Context) {
-        timerRunnable = object : Runnable {
-            override fun run() {
-                val currentTimeLeft = diffTime.longValue - 1000
-                if (currentTimeLeft > 0) {
-                    timerText.value = currentTimeLeft.timeFormat()
-                    diffTime.longValue = currentTimeLeft
-                    timerHandler.postDelayed(this, 1000)
-                } else {
-                    timerText.value = getStringResource(context,R.string.tap_to_mine)
+        viewModelScope.launch{
+            countDownTimer?.cancel()
+            countDownTimer = object : CountDownTimer(diffTime.longValue, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    timerText.value = millisUntilFinished.timeFormat()
+                }
+
+                override fun onFinish() {
+                    timerText.value = context.getString(R.string.tap_to_mine)
                 }
             }
+            countDownTimer?.start()
         }
-        timerHandler.post(timerRunnable!!)
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        timerHandler.removeCallbacksAndMessages(null)
-    }
-
-    private fun getStringResource(context: Context, stringResId: Int): String {
-        return context.resources.getString(stringResId)
-    }
-
 }
+
 
