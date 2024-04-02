@@ -41,6 +41,7 @@ import com.kaya.digitalmining.R
 import com.kaya.digitalmining.controller.Auth
 import com.kaya.digitalmining.mainView.MainActivity
 import com.kaya.digitalmining.model.User
+import com.kaya.digitalmining.navigation.Screen
 import com.kaya.digitalmining.util.CustomProgressDialog
 import com.kaya.digitalmining.util.getString
 
@@ -129,8 +130,8 @@ fun LoginScreen(navController : NavController, context: Context) {
         }
 
         Surface (onClick = {
-            navController.navigate("signUpScreen") {
-                popUpTo("loginScreen") {
+            navController.navigate(Screen.SignUpScreen.route) {
+                popUpTo(Screen.LoginScreen.route) {
                     inclusive = true
                 }
             }

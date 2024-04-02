@@ -8,10 +8,15 @@
     <string name="dont_have_account">"Don't have an account yet? Sign up."</string>
     <string name="synchronization...">Synchronization...</string>
     <string name="already_have_an_account">Already have an account? Sign In</string>
+    <string name="minig">Mining</string>
 
     <!-- Settings Screen Resources -->
     <string name="settings">Settings</string>
 
-    <string name="minig">Mining</string>
+    <!-- SDK Network Email -->
+    <string name="sdkNetworkMail" translatable="false">info.sdknetwork@gmail.com</string>
+
+    <!-- Splash Screen Resources -->
     <string name="title_activity_splash_screen" translatable="false">SplashScreenActivity</string>
+
 </resources>
