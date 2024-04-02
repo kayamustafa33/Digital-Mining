@@ -13,5 +13,10 @@
     <!-- Settings Screen Resources -->
     <string name="settings">Settings</string>
 
+    <!-- SDK Network Email -->
+    <string name="sdkNetworkMail" translatable="false">info.sdknetwork@gmail.com</string>
+
+    <!-- Splash Screen Resources -->
     <string name="title_activity_splash_screen" translatable="false">SplashScreenActivity</string>
+
 </resources>
