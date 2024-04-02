@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -78,15 +79,20 @@ fun SettingsItems(navController: NavController) {
             navController = navController,
             null
         ) { action ->
+            val activity = context as? Activity
+            val intent = Intent(context, AuthActivity::class.java)
             if (action) {
                 auth.deleteAccount { result ->
                     if (result) {
-                        val activity = context as? Activity
                         activity?.finish()
-                        val intent = Intent(context, AuthActivity::class.java)
                         context.startActivity(intent)
                     }
                 }
+            } else {
+                auth.logout()
+                activity?.finish()
+                context.startActivity(intent)
+                Toast.makeText(context, "Verify your identity and try again.", Toast.LENGTH_LONG).show()
             }
         }
         Divider()
