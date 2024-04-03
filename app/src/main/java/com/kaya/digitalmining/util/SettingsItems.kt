@@ -86,13 +86,13 @@ fun SettingsItems(navController: NavController) {
                     if (result) {
                         activity?.finish()
                         context.startActivity(intent)
+                    } else {
+                        auth.logout()
+                        activity?.finish()
+                        context.startActivity(intent)
+                        Toast.makeText(context, "Verify your identity and try again.", Toast.LENGTH_LONG).show()
                     }
                 }
-            } else {
-                auth.logout()
-                activity?.finish()
-                context.startActivity(intent)
-                Toast.makeText(context, "Verify your identity and try again.", Toast.LENGTH_LONG).show()
             }
         }
         Divider()

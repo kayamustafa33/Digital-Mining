@@ -73,9 +73,8 @@ fun HomeScreen(navController: NavController) {
     val filteredList = remember { mutableStateOf(emptyList<New>()) }
     val localLifecycleOwner = LocalLifecycleOwner.current
 
-    newsViewModel.getCryptoNews()
-
     LaunchedEffect(Unit) {
+        newsViewModel.getCryptoNews()
         newsViewModel.newsData.observe(localLifecycleOwner) { news ->
             if (news != null) {
                 cryptoNewsList.value = news.news
@@ -84,7 +83,6 @@ fun HomeScreen(navController: NavController) {
             }
         }
     }
-
 
     Column(
         modifier = Modifier
