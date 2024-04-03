@@ -3,7 +3,6 @@ package com.kaya.digitalmining.util
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -37,8 +36,6 @@ import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.authView.AuthActivity
 import com.kaya.digitalmining.controller.Auth
-import com.kaya.digitalmining.util.getString
-import com.kaya.digitalmining.mainView.profile.settings.ResetPasswordScreen
 import com.kaya.digitalmining.navigation.Screen
 
 @Composable
@@ -90,7 +87,11 @@ fun SettingsItems(navController: NavController) {
                         auth.logout()
                         activity?.finish()
                         context.startActivity(intent)
-                        Toast.makeText(context, "Verify your identity and try again.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            "Verify your identity and try again.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
