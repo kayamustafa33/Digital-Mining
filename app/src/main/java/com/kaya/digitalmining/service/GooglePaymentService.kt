@@ -3,15 +3,18 @@ package com.kaya.digitalmining.service
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kaya.digitalmining.model.Purchase
 import com.kaya.digitalmining.paymentService.paymentImplementor.BillingClientConnectionListener
 import com.kaya.digitalmining.paymentService.paymentImplementor.PurchaseServiceListener
 import com.kaya.digitalmining.paymentService.serviceData.DataWrappers
 import com.kaya.digitalmining.paymentService.serviceData.IapConnector
+import java.util.Date
 
 class GooglePaymentService : BillingClientConnectionListener, ViewModel(){
 
     private val isBillingConnected = MutableLiveData<Boolean>()
     val isPurchased = MutableLiveData<Boolean>()
+    val purchaseData = MutableLiveData<Purchase>()
 
     fun connectPayment(productList: MutableList<String>,context : Context) : IapConnector {
         isBillingConnected.value = false
@@ -37,6 +40,7 @@ class GooglePaymentService : BillingClientConnectionListener, ViewModel(){
                 when (purchaseInfo.sku) {
                     productList[0] -> {
                         isPurchased.value = true
+                        purchaseData.value = Purchase("Premium 1", 0.0, "", Date(), Date())
                     }
                     productList[1] -> {
                         isPurchased.value = true

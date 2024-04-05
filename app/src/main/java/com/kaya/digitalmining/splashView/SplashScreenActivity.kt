@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,14 +26,19 @@ import com.kaya.digitalmining.R
 import com.kaya.digitalmining.authView.AuthActivity
 import com.kaya.digitalmining.controller.Auth
 import com.kaya.digitalmining.mainView.MainActivity
+import com.kaya.digitalmining.service.SubscriptionService
 import kotlinx.coroutines.delay
 
 class SplashScreenActivity : ComponentActivity() {
 
     private val auth = Auth()
+    private lateinit var subscriptionService : SubscriptionService
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            subscriptionService = SubscriptionService()
+            subscriptionService.observePurchase(LocalLifecycleOwner.current)
             val progress = remember { mutableIntStateOf(0) }
             LaunchedEffect(Unit) {
                 while (progress.intValue < 100) {
