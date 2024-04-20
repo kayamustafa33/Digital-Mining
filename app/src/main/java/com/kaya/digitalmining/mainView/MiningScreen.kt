@@ -67,7 +67,7 @@ fun MiningScreen(context: Context) {
     val showSheet = remember { mutableStateOf(false) }
 
     val clipboardManager = LocalClipboardManager.current
-    val sdkNetworkWalletAddress = "0x1dD0c77E499e6e98359cAE3a7F509def94b14cC7"
+    val sdkNetworkWalletAddress = "Wallet ID"
     val adListenerViewModel = AdMobRewardedAd()
 
     if (showSheet.value) {
@@ -142,7 +142,7 @@ fun MiningScreen(context: Context) {
                 modifier = Modifier.size(199.dp)
             ) {
                 Text(
-                    text = if(countDownTimerViewModel.diffTime.longValue == 0L) getStringResource(context,R.string.synchronization___) else countDownTimerViewModel.timerText.value,
+                    text = if(countDownTimerViewModel.diffTime.longValue == 0L && minerViewModel.minerData.value != null) getStringResource(context,R.string.synchronization___) else countDownTimerViewModel.timerText.value,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth(),
