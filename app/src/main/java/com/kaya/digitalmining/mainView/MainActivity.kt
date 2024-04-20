@@ -36,6 +36,7 @@ import com.kaya.digitalmining.mainView.profile.RoadmapScreen
 import com.kaya.digitalmining.mainView.profile.WalletScreen
 import com.kaya.digitalmining.mainView.profile.settings.ResetPasswordScreen
 import com.kaya.digitalmining.mainView.profile.settings.SettingsScreen
+import com.kaya.digitalmining.navigation.Navigation
 import com.kaya.digitalmining.util.BottomNavItem
 import com.kaya.digitalmining.util.SuccessScreen
 
@@ -93,22 +94,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                 }) { innerPadding ->
-                NavHost(navController, startDestination = "homeScreen", Modifier.padding(innerPadding)) {
-                    composable("homeScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { HomeScreen(navController = navController) }
-                    composable("miningScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { MiningScreen(context = LocalContext.current) }
-                    composable("profileScreen", enterTransition = { EnterTransition.None}, exitTransition = {ExitTransition.None}) { ProfileScreen(context = LocalContext.current, navController = navController) }
-                    composable("newsDetailScreen") {
-                        val new = navController.previousBackStackEntry?.savedStateHandle?.get<New>("new")
-                        NewsDetail(navController = navController, cryptoNews = new)
-                    }
-                    composable("profileScreen/walletScreen", exitTransition = {ExitTransition.None}) { WalletScreen() }
-                    composable("profileScreen/settingsScreen", exitTransition = {ExitTransition.None}) { SettingsScreen(navController = navController) }
-                    composable("settingsScreen/resetPasswordScreen", exitTransition = {ExitTransition.None}) { ResetPasswordScreen(navController = navController) }
-                    composable("profileScreen/oldMinerScreen", exitTransition = {ExitTransition.None}){ OldMinerScreen() }
-                    composable("profileScreen/roadmapScreen", exitTransition = { ExitTransition.None}) { RoadmapScreen() }
-                    composable("resetPasswordScreen/successScreen", exitTransition = { ExitTransition.None}) { SuccessScreen(navController = navController) }
-                    composable("successScreen/profileScreen", exitTransition = { ExitTransition.None}) { ProfileScreen(context = LocalContext.current, navController = navController) }
-                }
+                Navigation(navController = navController, innerPadding = innerPadding)
             }
         }
     }

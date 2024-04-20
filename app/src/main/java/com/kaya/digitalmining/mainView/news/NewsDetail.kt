@@ -1,5 +1,6 @@
 package com.kaya.digitalmining.mainView.news
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -26,7 +28,7 @@ import com.kaya.digitalmining.model.New
 
 @Composable
 fun NewsDetail(navController: NavController, cryptoNews: New?) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().background(Color(ContextCompat.getColor(navController.context, R.color.background)))) {
         NewsImage(imageURL = cryptoNews?.image.toString())
         NewsContent(title = cryptoNews?.title.toString(), content = cryptoNews?.content.toString())
     }
@@ -58,14 +60,15 @@ fun NewsContent(title: String, content: String) {
             .padding(horizontal = 20.dp, vertical = 10.dp),
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
-        color = Color.Black
+        color = Color.White
     )
     Text(
         text = content,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
-        fontSize = 18.sp
+        fontSize = 18.sp,
+        color = Color.White
     )
 }
 

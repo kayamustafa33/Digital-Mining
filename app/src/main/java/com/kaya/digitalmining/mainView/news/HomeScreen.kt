@@ -46,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -56,6 +57,7 @@ import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.model.New
+import com.kaya.digitalmining.navigation.Screen
 import com.kaya.digitalmining.util.CustomProgressDialog
 import com.kaya.digitalmining.viewModel.NewsViewModel
 import kotlinx.coroutines.delay
@@ -72,9 +74,8 @@ fun HomeScreen(navController: NavController) {
     val filteredList = remember { mutableStateOf(emptyList<New>()) }
     val localLifecycleOwner = LocalLifecycleOwner.current
 
-    newsViewModel.getCryptoNews()
-
     LaunchedEffect(Unit) {
+        newsViewModel.getCryptoNews()
         newsViewModel.newsData.observe(localLifecycleOwner) { news ->
             if (news != null) {
                 cryptoNewsList.value = news.news
@@ -84,25 +85,24 @@ fun HomeScreen(navController: NavController) {
         }
     }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color(ContextCompat.getColor(navController.context, R.color.background)))
     ) {
 
         Spacer(modifier = Modifier.height(5.dp))
 
         Text(
             text = "Current Date",
-            color = Color.DarkGray,
+            color = Color.Gray,
             fontSize = 16.sp,
             modifier = Modifier.padding(start = 25.dp, top = 15.dp)
         )
 
         Text(
             text = "Welcome, User \uD83D\uDC4B",
-            color = Color.Black,
+            color = Color.White,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(start = 25.dp)
@@ -134,7 +134,7 @@ fun HomeScreen(navController: NavController) {
                                 key = "new",
                                 value = filteredList.value[it]
                             )
-                            navController.navigate(route = "newsDetailScreen")
+                            navController.navigate(route = Screen.NewsDetailScreen.route)
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -170,12 +170,14 @@ fun HomeScreen(navController: NavController) {
 
                         Text(
                             text = filteredList.value[it].title,
+                            color = Color.White,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
 
                         Text(
                             text = filteredList.value[it].content,
+                            color = Color.White,
                             maxLines = 2,
                             fontSize = 14.sp,
                             overflow = TextOverflow.Ellipsis
@@ -207,10 +209,14 @@ fun SearchView(onSearch: (String) -> Unit) {
         label = { Text("Search") },
         singleLine = true,
         colors = OutlinedTextFieldDefaults.colors(
-            cursorColor = Color.Black,
-            focusedBorderColor = Color.Black,
-            unfocusedBorderColor = Color.Black,
-            disabledBorderColor = Color.Black,
+            cursorColor = Color.White,
+            focusedBorderColor = Color(ContextCompat.getColor(LocalContext.current, R.color.yellow)),
+            unfocusedBorderColor = Color.Gray,
+            unfocusedLabelColor = Color.Gray,
+            disabledBorderColor = Color.White,
+            focusedLeadingIconColor = Color.White ,
+            focusedLabelColor = Color(ContextCompat.getColor(LocalContext.current, R.color.yellow)),
+            focusedTextColor = Color.White
         ),
         leadingIcon = {
             Icon(

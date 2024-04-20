@@ -3,6 +3,7 @@ package com.kaya.digitalmining.mainView
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.authView.AuthActivity
 import com.kaya.digitalmining.controller.Auth
+import com.kaya.digitalmining.navigation.Screen
 import com.kaya.digitalmining.util.ProfileItems
 
 @Composable
@@ -110,10 +112,11 @@ fun ProfileScreen(context: Context, navController: NavController) {
 
 private fun profileDestination(navController: NavController, context: Context, page: String) {
     when(page) {
-        "Wallet" -> navController.navigate("profileScreen/walletScreen")
-        "Mining History" -> {navController.navigate("profileScreen/oldMinerScreen")}
-        "Roadmap" -> {navController.navigate("profileScreen/roadmapScreen")}
-        "Settings" -> navController.navigate("profileScreen/settingsScreen")
+        "Wallet" -> navController.navigate("${Screen.ProfileScreen.route}/${Screen.WalletScreen.route}")
+        "Mining History" -> {navController.navigate("${Screen.ProfileScreen.route}/${Screen.OldMinerScreen.route}")}
+        "Roadmap" -> {navController.navigate("${Screen.ProfileScreen.route}/${Screen.RoadmapScreen.route}")}
+        "Mining History" -> { }
+        "Settings" -> navController.navigate("${Screen.ProfileScreen.route}/${Screen.SettingsScreen.route}")
         "Logout" -> {
             val auth = Auth()
             auth.logout()
