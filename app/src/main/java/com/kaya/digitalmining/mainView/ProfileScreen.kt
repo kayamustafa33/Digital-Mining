@@ -3,7 +3,6 @@ package com.kaya.digitalmining.mainView
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -114,7 +113,6 @@ private fun profileDestination(navController: NavController, context: Context, p
         "Wallet" -> navController.navigate("profileScreen/walletScreen")
         "Mining History" -> {navController.navigate("profileScreen/oldMinerScreen")}
         "Roadmap" -> {navController.navigate("profileScreen/roadmapScreen")}
-        "Mining History" -> {}
         "Settings" -> navController.navigate("profileScreen/settingsScreen")
         "Logout" -> {
             val auth = Auth()
