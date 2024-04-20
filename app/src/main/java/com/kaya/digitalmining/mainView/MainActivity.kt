@@ -3,8 +3,6 @@ package com.kaya.digitalmining.mainView
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
@@ -23,22 +21,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kaya.digitalmining.mainView.news.NewsDetail
-import com.kaya.digitalmining.model.New
-import com.kaya.digitalmining.mainView.news.HomeScreen
-import com.kaya.digitalmining.mainView.profile.OldMinerScreen
-import com.kaya.digitalmining.mainView.profile.RoadmapScreen
-import com.kaya.digitalmining.mainView.profile.WalletScreen
-import com.kaya.digitalmining.mainView.profile.settings.ResetPasswordScreen
-import com.kaya.digitalmining.mainView.profile.settings.SettingsScreen
 import com.kaya.digitalmining.navigation.Navigation
 import com.kaya.digitalmining.util.BottomNavItem
-import com.kaya.digitalmining.util.SuccessScreen
 
 class MainActivity : ComponentActivity() {
 

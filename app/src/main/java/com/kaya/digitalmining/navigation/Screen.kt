@@ -14,5 +14,6 @@ sealed class Screen(val route: String) {
     data object OldMinerScreen : Screen("oldMinerScreen")
     data object RoadmapScreen : Screen("roadmapScreen")
     data object SuccessScreen : Screen("successScreen")
+    data object PrivacyScreen : Screen("privacyScreen")
 
 }

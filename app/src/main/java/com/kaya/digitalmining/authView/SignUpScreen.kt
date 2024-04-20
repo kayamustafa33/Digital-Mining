@@ -6,19 +6,30 @@ import android.content.Intent
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +67,7 @@ fun SignUpScreen(navController : NavController, context: Context){
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
     val showDialog = remember { mutableStateOf(false) }
+    val checked = remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -128,12 +140,48 @@ fun SignUpScreen(navController : NavController, context: Context){
             )
         )
 
+        Row (
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ){
+            Switch(
+                checked = checked.value,
+                onCheckedChange = {
+                    checked.value = it
+                },
+                thumbContent = if (checked.value) {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = null,
+                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                        )
+                    }
+                } else {
+                    null
+                },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color(0xFF3498DB),
+                    checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                )
+            )
+            Spacer(modifier = Modifier.padding(start = 10.dp))
+            Text(
+                text = getString(id = R.string.privacy_policy_text),
+                modifier = Modifier.clickable {
+                    navController.navigate(Screen.PrivacyScreen.route)
+                }
+            )
+        }
 
         Button(
             onClick = {
                       if(email.value.isNotEmpty()
                           && password.value.isNotEmpty()
-                          && confirmPassword.value.isNotEmpty()){
+                          && confirmPassword.value.isNotEmpty()
+                          && checked.value){
 
                           if(password.value == confirmPassword.value){
                               if(password.value.length >= 6){
@@ -160,12 +208,12 @@ fun SignUpScreen(navController : NavController, context: Context){
                                   }
                               } else {
                                   showDialog.value = false
-                                  Toast.makeText(context,"Passwords length should be greater than 6!",Toast.LENGTH_SHORT).show()
+                                  Toast.makeText(context,context.getString(R.string.password_length),Toast.LENGTH_SHORT).show()
                               }
 
                           } else {
                               showDialog.value = false
-                              Toast.makeText(context,"Passwords don't matches!",Toast.LENGTH_SHORT).show()
+                              Toast.makeText(context,context.getString(R.string.passwords_matches),Toast.LENGTH_SHORT).show()
                           }
 
 

@@ -17,6 +17,7 @@ import com.kaya.digitalmining.mainView.MiningScreen
 import com.kaya.digitalmining.mainView.ProfileScreen
 import com.kaya.digitalmining.mainView.news.HomeScreen
 import com.kaya.digitalmining.mainView.news.NewsDetail
+import com.kaya.digitalmining.mainView.privacy.PrivacyScreen
 import com.kaya.digitalmining.mainView.profile.OldMinerScreen
 import com.kaya.digitalmining.mainView.profile.RoadmapScreen
 import com.kaya.digitalmining.mainView.profile.WalletScreen
