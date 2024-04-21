@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kaya.digitalmining.R
 import com.kaya.digitalmining.model.Miner
@@ -61,7 +62,7 @@ fun MiningScreen(context: Context) {
 
     val minerViewModel = viewModel<MinerViewModel>()
     val firebaseImplementor by lazy { FirebaseImplementor() }
-    val countDownTimerViewModel = viewModel<CountDownTimerViewModel>()
+    val countDownTimerViewModel = viewModel { CountDownTimerViewModel(context) }
 
     val showDialog = remember { mutableStateOf(false) }
     val showSheet = remember { mutableStateOf(false) }
@@ -83,7 +84,7 @@ fun MiningScreen(context: Context) {
         it?.let { miner ->
             countDownTimerViewModel.startCountDownTimer(context, miner.initDate)
         } ?: run {
-            countDownTimerViewModel.timerText.value = "Tap to mine"
+            countDownTimerViewModel.timerText.value = context.getText(R.string.tap_to_mine).toString()
         }
     }
 
@@ -142,7 +143,7 @@ fun MiningScreen(context: Context) {
                 modifier = Modifier.size(199.dp)
             ) {
                 Text(
-                    text = if(countDownTimerViewModel.diffTime.longValue == 0L && minerViewModel.minerData.value != null) getStringResource(context,R.string.synchronization___) else countDownTimerViewModel.timerText.value,
+                    text = if(countDownTimerViewModel.diffTime.longValue == 0L && minerViewModel.minerData.value != null) getStringResource(context,R.string.synchronization___) else countDownTimerViewModel.timerText.value.toString(),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth(),
@@ -180,7 +181,7 @@ fun MiningScreen(context: Context) {
             // Add user wallet address
             ClickableText(text = sdkNetworkWalletAddress) {
                 clipboardManager.setText(AnnotatedString(sdkNetworkWalletAddress))
-                Toast.makeText(context,"Kopyalandı, şimdi zenginsin kaşmer!",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getText(R.string.copied),Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -192,7 +193,7 @@ fun MiningScreen(context: Context) {
                 onClick = { showSheet.value = true },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Mining Rate")
+                Text(text = context.getText(R.string.mining_speed).toString())
             }
         }
     }

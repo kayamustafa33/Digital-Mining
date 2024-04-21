@@ -22,5 +22,7 @@
     <string name="privacy_policy_text">Privacy Policy</string>
     <string name="password_length">Passwords length should be greater than 5!</string>
     <string name="passwords_matches">Passwords don\'t matches!</string>
+    <string name="copied">Copied</string>
+    <string name="mining_speed">Mining Speed</string>
 
 </resources>

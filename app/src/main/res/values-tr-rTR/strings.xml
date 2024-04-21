@@ -18,4 +18,6 @@
     <string name="privacy_policy_text">Gizlilik Politikası</string>
     <string name="password_length">Şifre uzunluğu 5 den fazla olmalıdır!</string>
     <string name="passwords_matches">Şifreler eşleşmiyor!</string>
+    <string name="copied">Kopyalandı</string>
+    <string name="mining_speed">Kazım Hızı</string>
 </resources>
